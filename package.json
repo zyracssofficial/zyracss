@@ -26,7 +26,6 @@
     "test:all": "npm test && npm run test --workspaces",
     "build": "npm run build --workspaces",
     "publish:tools": "npm run publish --workspaces",
-    "prepublishOnly": "npm run test",
     "clean": "npm run clean --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present"
   },
