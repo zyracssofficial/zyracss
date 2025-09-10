@@ -1,0 +1,64 @@
+{
+  "name": "zyracss",
+  "version": "0.1.0",
+  "description": "ZyraCSS - Utility-first CSS generator with arbitrary values",
+  "type": "module",
+  "main": "src/index.js",
+  "types": "index.d.ts",
+  "sideEffects": false,
+  "workspaces": [
+    "packages/*"
+  ],
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "types": "./index.d.ts"
+    },
+    "./browser": {
+      "import": "./src/api/core/browserManager.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "node test/smoke-test.mjs",
+    "test:full": "node test/mvp-api-test.mjs && node test/performance-test.mjs",
+    "test:watch": "node --test --watch test/**/*.test.js",
+    "test:all": "npm test && npm run test --workspaces",
+    "build": "npm run build --workspaces",
+    "publish:tools": "npm run publish --workspaces",
+    "prepublishOnly": "npm run test",
+    "clean": "npm run clean --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "keywords": [
+    "css",
+    "utility-first",
+    "css-generator",
+    "zyracss",
+    "arbitrary-values",
+    "atomic-css"
+  ],
+  "author": "Sandipan Mukherjee",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zyracssofficial/zyracss.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zyracssofficial/zyracss/issues"
+  },
+  "homepage": "https://github.com/zyracssofficial/zyracss#readme",
+  "devDependencies": {
+    "eslint": "^9.33.0",
+    "prettier": "^3.6.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "src/",
+    "index.d.ts",
+    "README.md",
+    "LICENSE"
+  ]
+}

@@ -1,0 +1,30 @@
+/* ZyraCSS Build-Time Generated Styles */
+/* The @import directive below will be replaced with generated CSS at build time */
+@import "zyracss";
+
+/* Base styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Custom styles can be added here */
+.custom-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}

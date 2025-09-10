@@ -1,0 +1,15 @@
+test/
+examples/
+*.md
+!README.md
+.git*
+node_modules/
+coverage/
+.DS_Store
+.env*
+*.log
+setup-dev.sh
+prepare-publish.sh
+publish.sh
+documentation.md
+zyracss.config.js

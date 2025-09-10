@@ -1,0 +1,36 @@
+{
+  "name": "@zyracss/vite",
+  "version": "0.1.0",
+  "description": "ZyraCSS Vite Plugin - Build-time CSS generation with smart framework detection",
+  "main": "src/index.js",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "LICENSE"
+  ],
+  "peerDependencies": {
+    "zyracss": "^0.1.0",
+    "vite": "^4.0.0 || ^5.0.0"
+  },
+  "keywords": [
+    "zyracss",
+    "vite",
+    "plugin",
+    "build-time",
+    "css"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zyracss/zyracss.git",
+    "directory": "packages/vite"
+  },
+  "bugs": {
+    "url": "https://github.com/zyracss/zyracss/issues"
+  },
+  "homepage": "https://github.com/zyracss/zyracss#readme",
+  "license": "MIT",
+  "author": "Sandipan Mukherjee"
+}
