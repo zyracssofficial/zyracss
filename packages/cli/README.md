@@ -53,10 +53,10 @@ npm install zyracss @zyracss/cli
 
 ```bash
 # Build CSS from your HTML files
-zyracss build
+npx zyracss build
 
 # Watch for changes and auto-rebuild
-zyracss watch
+npx zyracss watch
 ```
 
 **That's it!** Your CSS will be generated in `dist/styles.css`.
@@ -69,19 +69,19 @@ Generate CSS from your source files:
 
 ```bash
 # Basic build
-zyracss build
+npx zyracss build
 
 # Custom input/output
-zyracss build -i "src/**/*.html" -o "dist/app.css"
+npx zyracss build -i "src/**/*.html" -o "dist/app.css"
 
 # Minified output
-zyracss build --minify
+npx zyracss build --minify
 
 # Verbose output
-zyracss build --verbose
+npx zyracss build --verbose
 
 # Force rebuild (clear cache)
-zyracss build --force
+npx zyracss build --force
 ```
 
 ### Watch Command
@@ -90,10 +90,10 @@ Continuously watch files and regenerate CSS on changes:
 
 ```bash
 # Watch with defaults
-zyracss watch
+npx zyracss watch
 
 # Watch with custom options
-zyracss watch -i "src/**/*.html" -o "dist/app.css" --minify --verbose
+npx zyracss watch -i "src/**/*.html" -o "dist/app.css" --minify --verbose
 ```
 
 ## ⚙️ Command Options
@@ -147,7 +147,7 @@ my-site/
 └── contact.html
 
 # Generate CSS
-zyracss build
+npx zyracss build
 
 # Output: dist/styles.css
 ```
@@ -156,14 +156,14 @@ zyracss build
 
 ```bash
 # Custom input and output
-zyracss build -i "pages/**/*.html" -o "public/app.css" --minify
+npx zyracss build -i "pages/**/*.html" -o "public/app.css" --minify
 ```
 
 ### Development Workflow
 
 ```bash
 # Start watching during development
-zyracss watch --verbose
+npx zyracss watch --verbose
 
 # In another terminal, edit your HTML files
 # CSS will be regenerated automatically
@@ -246,7 +246,7 @@ Use ZyraCSS classes in your HTML:
 ### Build Output
 
 ```bash
-$ zyracss build --verbose
+$ npx zyracss build --verbose
 
 🎨 ZyraCSS CLI v0.1.0
 📁 Input patterns: ["./src/**/*.html", "./*.html"]
@@ -260,7 +260,7 @@ $ zyracss build --verbose
 ### Watch Output
 
 ```bash
-$ zyracss watch --verbose
+$ npx zyracss watch --verbose
 
 🎨 ZyraCSS CLI v0.1.0 - Watch Mode
 👀 Watching: ["./src/**/*.html", "./*.html"]
@@ -295,18 +295,18 @@ make css
 
 ```bash
 # Build different sections separately
-zyracss build -i "src/pages/**/*.html" -o "dist/pages.css"
-zyracss build -i "src/components/**/*.html" -o "dist/components.css"
+npx zyracss build -i "src/pages/**/*.html" -o "dist/pages.css"
+npx zyracss build -i "src/components/**/*.html" -o "dist/components.css"
 ```
 
 ### Performance Optimization
 
 ```bash
 # For large projects, use specific patterns
-zyracss build -i "src/critical/**/*.html" -o "dist/critical.css" --minify
+npx zyracss build -i "src/critical/**/*.html" -o "dist/critical.css" --minify
 
 # Exclude unnecessary directories
-zyracss build -i "src/**/*.html" -i "!src/archive/**" -o "dist/app.css"
+npx zyracss build -i "src/**/*.html" -i "!src/archive/**" -o "dist/app.css"
 ```
 
 ## 🛠️ Troubleshooting
@@ -327,7 +327,7 @@ npm list -g @zyracss/cli
 
 ```bash
 # Check your input patterns
-zyracss build --verbose
+npx zyracss build --verbose
 
 # Make sure HTML files contain ZyraCSS classes
 grep -r "class.*\[" src/
@@ -345,10 +345,10 @@ chmod 755 dist
 
 ```bash
 # Use verbose mode to see what's being processed
-zyracss build --verbose
+npx zyracss build --verbose
 
 # Check your file patterns match your structure
-zyracss build -i "**/*.html" --verbose
+npx zyracss build -i "**/*.html" --verbose
 ```
 
 ### Debug Mode
@@ -356,7 +356,7 @@ zyracss build -i "**/*.html" --verbose
 Use verbose output to diagnose issues:
 
 ```bash
-zyracss build --verbose
+npx zyracss build --verbose
 ```
 
 This shows:
@@ -380,8 +380,8 @@ Perfect for:
 
 ```bash
 # Simple setup
-zyracss build
-zyracss watch
+npx zyracss build
+npx zyracss watch
 ```
 
 ### Legacy Projects

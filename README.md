@@ -2,7 +2,35 @@
 
 **A utility-first CSS generator with unlimited arbitrary values and zero configuration**
 
-ZyraCSS generates CSS from utility classes using clean bracket syntax. Write exactly the CSS values you need without preset limitations or configuration files.
+ZyraCSS generates CSS from utility classes using clean bracket [] syntax. Write exactly the CSS values you need without preset limitations or configuration files.
+
+## 🎯 Quick Example
+
+```html
+<!-- Write any CSS value you need -->
+<div
+  class="font-size-[1.25rem] color-[#3b82f6] background-[linear-gradient(45deg,#ff6b6b,#4ecdc4)] padding-[20px,30px]"
+>
+  Beautiful gradients with custom padding and colors
+</div>
+```
+
+**Generates:**
+
+```css
+.font-size-\[1\.25rem\] {
+  font-size: 1.25rem;
+}
+.color-\[\#3b82f6\] {
+  color: #3b82f6;
+}
+.background-\[linear-gradient\(45deg\,\#ff6b6b\,\#4ecdc4\)\] {
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+}
+.padding-\[20px\,30px\] {
+  padding: 20px 30px;
+}
+```
 
 ## ✨ Features
 
@@ -148,13 +176,13 @@ npm install zyracss @zyracss/cli
 
 ```bash
 # Build CSS from your HTML files
-zyracss build
+npx zyracss build
 
 # Watch for changes and auto-rebuild
-zyracss watch
+npx zyracss watch
 
 # Custom input/output paths
-zyracss build -i "src/**/*.html" -o "dist/styles.css" --minify
+npx zyracss build -i "src/**/*.html" -o "dist/styles.css" --minify
 ```
 
 **Step 3: Link the generated CSS file in your HTML**
@@ -389,7 +417,7 @@ console.log(stats); // { processedClasses: 3, cssRules: 3, initialized: true }
 | --------------- | --------------------------- | ----------------------------------- |
 | `zyracss`       | Core engine + runtime API   | `npm install zyracss`               |
 | `@zyracss/vite` | Vite build-time integration | `npm install zyracss @zyracss/vite` |
-| `@zyracss/cli`  | CLI tools for static sites  | `npm install zyracss @zyracss/cli` |
+| `@zyracss/cli`  | CLI tools for static sites  | `npm install zyracss @zyracss/cli`  |
 
 ### Installation Patterns
 
@@ -410,29 +438,29 @@ npm install zyracss @zyracss/cli
 
 ```bash
 # Basic build
-zyracss build
+npx zyracss build
 
 # Custom input/output
-zyracss build -i "src/**/*.html" -o "dist/app.css"
+npx zyracss build -i "src/**/*.html" -o "dist/app.css"
 
 # Minified output
-zyracss build --minify
+npx zyracss build --minify
 
 # Verbose output
-zyracss build --verbose
+npx zyracss build --verbose
 
 # Force rebuild (clear cache)
-zyracss build --force
+npx zyracss build --force
 ```
 
 ### Watch Mode
 
 ```bash
 # Watch with defaults
-zyracss watch
+npx zyracss watch
 
 # Watch with custom options
-zyracss watch -i "src/**/*.html" -o "dist/app.css" --minify --verbose
+npx zyracss watch -i "src/**/*.html" -o "dist/app.css" --minify --verbose
 ```
 
 ### CLI Options

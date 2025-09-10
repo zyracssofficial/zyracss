@@ -25,12 +25,12 @@ let packageInfo = null;
 
 // Synchronous fallback version info
 const FALLBACK_VERSION = {
-  version: "0.1.2",
+  version: "0.1.3",
   major: 0,
   minor: 1,
-  patch: 2,
+  patch: 3,
   name: "zyracss",
-  FULL: "0.1.2",
+  FULL: "0.1.3",
 };
 
 function loadPackageInfo() {

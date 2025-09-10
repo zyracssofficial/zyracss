@@ -11,7 +11,7 @@ This project demonstrates **CLI-based CSS generation** using the ZyraCSS command
 
 ## How ZyraCSS is Implemented
 
-1. **CLI Command**: Uses `zyracss` command to process files
+1. **CLI Command**: Uses `npx zyracss` command to process files
 2. **File Scanning**: Analyzes HTML files for ZyraCSS class usage
 3. **CSS Generation**: Compiles found classes into standard CSS
 4. **Output File**: Generates `dist/styles.css` with optimized styles
@@ -19,11 +19,11 @@ This project demonstrates **CLI-based CSS generation** using the ZyraCSS command
 ## Usage Example
 
 ```bash
-# Install ZyraCSS CLI globally
+# Install ZyraCSS CLI
 npm install zyracss @zyracss/cli
 
 # Generate CSS from HTML files
-zyracss --input "*.html" --output "dist/styles.css"
+npx zyracss build -i "*.html" -o "dist/styles.css"
 ```
 
 ## Quick Start
