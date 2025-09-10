@@ -266,12 +266,46 @@ export class FileWatcher {
       return false;
     }
 
-    // Check against exclude patterns
-    for (const excludePattern of this.config.excludePatterns) {
+    // Normalize path for cross-platform compatibility
+    const relativePath = path
+      .relative(process.cwd(), filePath)
+      .replace(/\\/g, "/");
+
+    // Fast exclude check for common problematic directories
+    const excludedDirs = [
+      "node_modules",
+      "dist",
+      "build",
+      ".git",
+      ".next",
+      "coverage",
+      ".vscode",
+      ".idea",
+      "tmp",
+      ".cache",
+    ];
+
+    for (const dir of excludedDirs) {
       if (
-        filePath.includes(
-          excludePattern.replace(/\*\*/g, "").replace(/\*/g, "")
-        )
+        relativePath.includes(`${dir}/`) ||
+        relativePath.startsWith(`${dir}/`)
+      ) {
+        return false;
+      }
+    }
+
+    // Check against custom exclude patterns from config
+    for (const excludePattern of this.config.excludePatterns) {
+      // Simple but effective pattern matching
+      const pattern = excludePattern
+        .replace(/^\*\*\//, "") // Remove leading **/
+        .replace(/\/\*\*$/, "") // Remove trailing /**
+        .replace(/\/\*\*\//g, "/") // Replace /**/ with /
+        .replace(/\*+/g, ""); // Remove remaining wildcards
+
+      if (
+        pattern &&
+        (relativePath.includes(pattern) || relativePath.startsWith(pattern))
       ) {
         return false;
       }
