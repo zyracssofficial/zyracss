@@ -63,6 +63,7 @@ export function parseClasses(classes) {
 export { zyraGetVersion } from "./core/utils/version.js";
 export { cleanupGlobalCache } from "./core/cache/index.js";
 export { now } from "./core/utils/index.js";
+export { MAX_FILES_LIMIT } from "./core/security/securityConstants.js";
 
 // ============================================================================
 // DEFAULT EXPORT - Main function for convenience

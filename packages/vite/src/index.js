@@ -10,10 +10,7 @@
  * - Configurable via zyracss.config.js
  */
 
-import {
-  zyraGenerateCSS,
-  zyraExtractClassFromHTML,
-} from "../../../src/index.js";
+import { zyraGenerateCSS, zyraExtractClassFromHTML } from "zyracss";
 import fs from "fs";
 import path from "path";
 

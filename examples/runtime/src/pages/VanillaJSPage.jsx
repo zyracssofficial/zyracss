@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { zyraCSSManager } from "../../../../src/index.js";
+import { zyraCSSManager } from "zyracss";
 
 export default function VanillaJSPage() {
   const [status, setStatus] = useState("Loading...");
@@ -51,19 +51,8 @@ export default function VanillaJSPage() {
 
         addLog("✅ Container found");
 
-        // Import zyraCSSManager dynamically to catch import errors
-        let zyraCSSManager;
-        try {
-          const module = await import(
-            "../../../../src/api/core/browserManager.js"
-          );
-          zyraCSSManager = module.zyraCSSManager;
-          addLog("✅ zyraCSSManager imported successfully");
-        } catch (importError) {
-          addLog(`❌ Failed to import zyraCSSManager: ${importError.message}`);
-          setStatus("Error: Import failed");
-          return;
-        }
+        // zyraCSSManager is already imported at the top of the file
+        addLog("✅ zyraCSSManager ready");
 
         // Create simple DOM content
         containerRef.current.innerHTML = `

@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { zyracss } from "../../packages/vite/src/index.js";
+import { zyracss } from "@zyracss/vite";
 
 export default defineConfig({
   plugins: [

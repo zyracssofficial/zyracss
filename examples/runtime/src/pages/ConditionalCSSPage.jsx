@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { zyraCSSManager } from "../../../../src/index.js";
+import { zyraCSSManager } from "zyracss";
 
 // Component that demonstrates conditional styling based on props
 function Card({ variant, size, isActive, children, onClick }) {

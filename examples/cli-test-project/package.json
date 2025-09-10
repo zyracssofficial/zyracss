@@ -1,0 +1,16 @@
+{
+  "name": "cli-test-project",
+  "version": "1.0.0",
+  "description": "This project demonstrates **CLI-based CSS generation** using the ZyraCSS command-line interface to process HTML files and generate static CSS.",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@zyracss/cli": "^0.1.0",
+    "zyracss": "^0.1.0"
+  }
+}

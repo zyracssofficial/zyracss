@@ -1,5 +1,5 @@
 import { useState, createContext, useContext, useEffect } from "react";
-import { zyraCSSManager } from "../../../../src/index.js";
+import { zyraCSSManager } from "zyracss";
 
 // Theme Context
 const ThemeContext = createContext();

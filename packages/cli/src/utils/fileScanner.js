@@ -7,8 +7,7 @@ import { glob } from "glob";
 import fs from "fs/promises";
 import path from "path";
 import { existsSync } from "fs";
-import { ZyraError, ERROR_CODES } from "../../../../src/core/errors/index.js";
-import { MAX_FILES_LIMIT } from "../../../../src/core/security/securityConstants.js";
+import { ZyraError, ERROR_CODES, MAX_FILES_LIMIT } from "zyracss";
 
 /**
  * Supported file extensions for ZyraCSS class extraction

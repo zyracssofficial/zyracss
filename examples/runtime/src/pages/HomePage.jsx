@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { zyraCSSManager } from "../../../../src/index.js";
+import { zyraCSSManager } from "zyracss";
 
 export default function HomePage() {
   const [zyraStatus, setZyraStatus] = useState("checking...");

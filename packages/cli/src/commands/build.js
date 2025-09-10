@@ -13,7 +13,7 @@ import {
   zyraGetVersion,
   cleanupGlobalCache,
   now,
-} from "../../../../src/index.js";
+} from "zyracss";
 
 import {
   loadConfig,

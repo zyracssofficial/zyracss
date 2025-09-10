@@ -430,4 +430,4 @@ plugins: [
 4. **Use**: Write ZyraCSS classes in your components
 5. **Build**: CSS is generated automatically!
 
-For more examples and advanced usage, check out the [ZyraCSS documentation](https://github.com/zyracss/zyracss).
+For more examples and advanced usage, check out the [ZyraCSS documentation](https://github.com/zyracssofficial/zyracss).

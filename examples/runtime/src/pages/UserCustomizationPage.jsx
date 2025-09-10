@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { zyraCSSManager } from "../../../../src/index.js";
+import { zyraCSSManager } from "zyracss";
 
 // Local storage helpers
 const STORAGE_KEY = "zyracss-user-preferences";

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { zyraCSSManager } from "../../../src/index.js";
+import { zyraCSSManager } from "zyracss";
 
 function App() {
   // STATE: App state for dynamic styling

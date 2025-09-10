@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { zyraCSSManager } from "../../../../src/index.js";
+import { zyraCSSManager } from "zyracss";
 
 export default function DynamicCSSPage() {
   const [count, setCount] = useState(0);

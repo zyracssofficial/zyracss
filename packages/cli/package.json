@@ -1,6 +1,6 @@
 {
   "name": "@zyracss/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "ZyraCSS CLI - Command-line interface for static websites",
   "main": "src/index.js",
   "type": "module",
@@ -17,7 +17,7 @@
     "glob": "^11.0.3"
   },
   "peerDependencies": {
-    "zyracss": "^0.1.0"
+    "zyracss": "^0.1.1"
   },
   "keywords": [
     "zyracss",
@@ -27,13 +27,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zyracss/zyracss.git",
+    "url": "git+https://github.com/zyracssofficial/zyracss.git",
     "directory": "packages/cli"
   },
   "bugs": {
-    "url": "https://github.com/zyracss/zyracss/issues"
+    "url": "https://github.com/zyracssofficial/zyracss/issues"
   },
-  "homepage": "https://github.com/zyracss/zyracss#readme",
+  "homepage": "https://github.com/zyracssofficial/zyracss#readme",
   "license": "MIT",
   "author": "Sandipan Mukherjee"
 }

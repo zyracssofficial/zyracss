@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { zyraCSSManager } from "../../../../src/index.js";
+import { zyraCSSManager } from "zyracss";
 
 export default function StaticCSSPage() {
   // Static classes - generated once on component mount

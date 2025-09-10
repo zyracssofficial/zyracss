@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { zyraCSSManager } from "../../../../src/index.js";
+import { zyraCSSManager } from "zyracss";
 
 // Function to convert JSON design specifications to ZyraCSS classes
 function jsonToZyraCSS(designSpec) {
