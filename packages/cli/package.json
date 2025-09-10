@@ -1,6 +1,6 @@
 {
   "name": "@zyracss/cli",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "ZyraCSS CLI - Command-line interface for static websites",
   "main": "src/index.js",
   "type": "module",
@@ -17,7 +17,7 @@
     "glob": "^11.0.3"
   },
   "peerDependencies": {
-    "zyracss": "^0.1.1"
+    "zyracss": "^0.1.2"
   },
   "keywords": [
     "zyracss",

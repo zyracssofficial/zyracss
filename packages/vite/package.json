@@ -12,7 +12,7 @@
     "LICENSE"
   ],
   "peerDependencies": {
-    "zyracss": "^0.1.1",
+    "zyracss": "^0.1.2",
     "vite": "^4.0.0 || ^5.0.0"
   },
   "keywords": [

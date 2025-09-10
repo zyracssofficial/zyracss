@@ -1,6 +1,6 @@
 {
   "name": "zyracss",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "ZyraCSS - Utility-first CSS generator with arbitrary values",
   "type": "module",
   "main": "src/index.js",

@@ -65,6 +65,9 @@ export { cleanupGlobalCache } from "./core/cache/index.js";
 export { now } from "./core/utils/index.js";
 export { MAX_FILES_LIMIT } from "./core/security/securityConstants.js";
 
+// Error handling for CLI tools
+export { ZyraError, ERROR_CODES } from "./core/errors/index.js";
+
 // ============================================================================
 // DEFAULT EXPORT - Main function for convenience
 // ============================================================================
