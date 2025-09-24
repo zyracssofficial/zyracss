@@ -62,7 +62,7 @@ All notable changes to the ZyraCSS project are documented in this file.
 - Optimized import strategies across packages
 - Eliminated over-engineering in internal utilities
 
-### **⚡ PERFORMANCE**
+### **PERFORMANCE**
 
 **Synchronous Operations**
 
@@ -194,7 +194,7 @@ All notable changes to the ZyraCSS project are documented in this file.
 - Output formatting and minification
 - Framework-specific optimizations
 
-### 🛡️ **Security & Validation**
+### **Security & Validation**
 
 **Input Security**
 
