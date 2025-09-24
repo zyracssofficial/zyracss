@@ -3,7 +3,7 @@
  * Tests all print properties from print.js map with various value types
  */
 
-import { zyraGenerateCSS } from "../../src/index.js";
+import { zyra } from "../../src/index.js";
 
 let totalTests = 0;
 let passedTests = 0;
@@ -15,7 +15,7 @@ console.log("=====================================\n");
 /**
  * Test a print property with expected result
  */
-async function testProperty(
+function testProperty(
   className,
   shouldPass,
   description,
@@ -24,7 +24,7 @@ async function testProperty(
   totalTests++;
 
   try {
-    const result = await zyraGenerateCSS([className]);
+    const result = zyra.generate([className]);
     const hasCSS = !!(
       result.success &&
       result.data.css &&
@@ -172,3 +172,6 @@ if (failedTests === 0) {
   console.log(`\n⚠️  ${failedTests} tests failed`);
   // Don't exit with error code to allow quick_category_check to continue
 }
+
+
+

@@ -131,11 +131,11 @@ export default defineConfig({
 });
 ```
 
-**Step 3: Import and use the ZyraCSS Manager in your components**
+**Step 3: Use zyra.inject() in your components**
 
 ```jsx
 import React, { useEffect } from "react";
-import { zyraCSSManager } from "zyracss"; // Add this
+import { zyra } from "zyracss"; // Add this
 
 function DynamicComponent({ userTheme }) {
   const dynamicClasses = [
@@ -145,8 +145,8 @@ function DynamicComponent({ userTheme }) {
   ];
 
   useEffect(() => {
-    // use zyraCSSManager.processClasses()
-    zyraCSSManager.processClasses(dynamicClasses);
+    // use zyra.inject()
+    zyra.inject(dynamicClasses);
   }, [dynamicClasses]);
 
   return <div className={dynamicClasses.join(" ")}>Dynamic styling!</div>;
@@ -216,7 +216,7 @@ ZyraCSS uses strict bracket syntax for predictable and secure CSS generation:
 ### Core Format
 
 ```
-[property-prefix]-[value]
+property-[value]
 ```
 
 ### ✅ Essential Rules
@@ -395,27 +395,17 @@ export default {
 ### Runtime Configuration
 
 ```js
-import { zyraCSSManager } from "zyracss";
+import { zyra } from "zyracss";
 
 // Process classes for dynamic styling (auto-initializes)
-await zyraCSSManager.processClasses([
-  "bg-[#ff6b6b]",
-  "padding-[20px]",
-  "border-radius-[8px]",
-]);
-
-// Get runtime statistics
-const stats = zyraCSSManager.getStats();
-console.log(stats); // { processedClasses: 3, cssRules: 3, initialized: true }
+zyra.inject(["bg-[#ff6b6b]", "padding-[20px]", "border-radius-[8px]"]);
 ```
-
-````
 
 ## 📦 Package Ecosystem
 
 | Package         | Purpose                     | Installation                        |
 | --------------- | --------------------------- | ----------------------------------- |
-| `zyracss`       | Core engine + runtime API   | `npm install zyracss`               |
+| `zyracss`       | Core engine + inject API    | `npm install zyracss`               |
 | `@zyracss/vite` | Vite build-time integration | `npm install zyracss @zyracss/vite` |
 | `@zyracss/cli`  | CLI tools for static sites  | `npm install zyracss @zyracss/cli`  |
 
@@ -430,7 +420,7 @@ npm install zyracss
 
 # For static HTML sites
 npm install zyracss @zyracss/cli
-````
+```
 
 ## 🚀 CLI Commands
 
@@ -473,45 +463,90 @@ npx zyracss watch -i "src/**/*.html" -o "dist/app.css" --minify --verbose
 | `--verbose`    | Show detailed information | `--verbose`            |
 | `--force`      | Clear cache and rebuild   | `--force`              |
 
-## 🎯 Programmatic API
+## 🚀 Advanced Usage
 
-### Core Functions
+ZyraCSS provides a clean 3-method API for all CSS generation needs:
+
+### 1. CSS Generation - `zyra.generate()`
+
+Generate CSS from classes, HTML, or mixed inputs. Includes built-in validation.
 
 ```js
-import {
-  zyraGenerateCSS,
-  zyraGenerateCSSFromHTML,
-  zyraGenerateCSSFromClasses,
-  zyraCSSManager,
-} from "zyracss";
+import { zyra } from "zyracss";
 
-// Generate from classes array
-const result = await zyraGenerateCSS(["padding-[20px]", "bg-[#ff6b6b]"]);
+// From class array
+const result = zyra.generate(["p-[20px]", "bg-[red]"]);
 
-// Generate from HTML string
-const htmlResult = await zyraGenerateCSSFromHTML(`
-  <div class="margin-[10px] c-[blue]">Content</div>
-`);
+// From HTML string
+const result = zyra.generate(
+  '<div class="m-[10px] color-[blue]">Content</div>'
+);
 
-// Runtime manager for dynamic styles
-await zyraCSSManager.processClasses(["dynamic-class-[value]"]);
+// Mixed input
+const result = zyra.generate({
+  classes: ["p-[20px]"],
+  html: '<span class="bg-[yellow]">Text</span>',
+});
+
+// Access generated CSS and validation info
+if (result.success) {
+  console.log(result.data.css); // Generated CSS string
+  console.log(result.data.stats); // Processing statistics with validation counts
+  console.log(result.data.invalid); // Invalid classes found with suggestions
+  console.log(result.data.security); // Security warnings/blocked content
+}
 ```
 
-### API Response Format
+### 2. Runtime CSS Injection - `zyra.inject()`
+
+Inject CSS directly into the browser DOM for dynamic styling.
+
+```js
+// Inject styles dynamically (browser only)
+zyra.inject(["bg-[blue]", "p-[15px]", "border-radius-[8px]"]);
+
+// Perfect for theme switching or user customization
+const userTheme = { primary: "#ff6b6b", spacing: "20px" };
+zyra.inject([`bg-[${userTheme.primary}]`, `p-[${userTheme.spacing}]`]);
+```
+
+### 3. Advanced Engine - `zyra.createEngine()`
+
+Create specialized engine instances for batch processing and custom workflows.
+
+```js
+// Create engine with options
+const engine = zyra.createEngine({
+  minify: true,
+  groupSelectors: true,
+});
+
+// Add classes incrementally
+engine.addClasses(["p-[20px]", "bg-[red]"]);
+engine.addClasses(["m-[10px]"]);
+
+// Generate CSS from all accumulated classes
+const result = engine.getCSS();
+console.log(result.data.css); // All generated CSS
+console.log(result.data.stats); // Processing statistics including total classes
+console.log(result.data.invalid); // Invalid classes found
+console.log(result.data.security); // Security warnings
+```
+
+### Response Format
+
+All methods return consistent `ZyraResult` objects:
 
 ```js
 {
-  success: true,
+  success: true,                    // Boolean: operation success
   data: {
-    css: "/* Generated CSS */",
-    classes: ["padding-[20px]", "bg-[#ff6b6b]"],
-    metadata: {
-      totalClasses: 2,
-      validClasses: 2,
-      generatedRules: 2,
-      processingTime: "1.23ms"
-    }
-  }
+    css: "...",                    // Generated CSS string
+    stats: { validClasses: 2 },    // Processing statistics with counts
+    invalid: [...],                // Invalid classes with detailed errors
+    security: [...]                // Security warnings/blocked content
+  },
+  error: null                      // Error message if failed
 }
 ```
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { zyraCSSManager } from "zyracss";
+import { zyra } from "zyracss";
 
 function App() {
   const [activeTab, setActiveTab] = useState("content");
@@ -24,7 +24,7 @@ function App() {
 
   // Process static layout styles once
   useEffect(() => {
-    zyraCSSManager.processClasses([
+    zyra.inject([
       // Layout and positioning
       "min-h-[100vh]",
       "min-h-[300px]",
@@ -121,7 +121,7 @@ function App() {
       `hover:opacity-[0.9]`,
     ];
 
-    zyraCSSManager.processClasses(customClasses);
+    zyra.inject(customClasses);
   }, [preferences]);
 
   const updatePreference = (key, value) => {

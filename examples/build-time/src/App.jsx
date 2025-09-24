@@ -182,18 +182,18 @@ function App() {
             <h4 className="font-size-[20px] font-weight-[600] margin-[0,0,16px,0] c-[#60a5fa]">
               💡 How Build-Time Works
             </h4>
-            <pre className="font-family-[monospace] font-size-[14px] line-height-[1.5] overflow-x-[auto] margin-[0] c-[#e5e7eb]">
-              {`// ✅ Static classes work perfectly with build-time scanning
+            <pre className="font-family-[monospace] font-size-[14px] line-height-[1.5] overflow-x-[auto] margin-[0] c-[#555]">
+              {`✅ Static classes work perfectly with build-time scanning
 <Button className="bg-[#3b82f6] c-[white] p-[12px,24px]">
   Click me
 </Button>
 
-// ✅ Conditional static classes also work great
+✅ Conditional static classes also work great
 const buttonStyle = isActive 
   ? "bg-[#059669] hover:bg-[#047857]" 
   : "bg-[#6b7280] hover:bg-[#4b5563]";
 
-// ✅ Object-based static class selection
+✅ Object-based static class selection
 const sizeClasses = {
   small: "p-[8px,16px] font-size-[14px]",
   large: "p-[16px,32px] font-size-[18px]"

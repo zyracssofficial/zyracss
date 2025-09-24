@@ -4,11 +4,7 @@
  * Extreme testing of security, cache, parsing, regex, error handling, and performance
  */
 
-import {
-  zyraGenerateCSSFromClasses,
-  zyraGenerateCSSFromHTML,
-  parseClasses,
-} from "../src/index.js";
+import { zyra } from "../src/index.js";
 import { globalCache } from "../src/core/cache/index.js";
 import fs from "fs/promises";
 import { spawn } from "child_process";
@@ -51,7 +47,7 @@ class StressTestSuite {
     let xssBlocked = 0;
     for (const payload of xssPayloads) {
       try {
-        const result = await zyraGenerateCSSFromClasses([payload]);
+        const result = zyra.generate([payload]);
         if (
           !result.data.css.includes("javascript:") &&
           !result.data.css.includes("expression(") &&
@@ -73,7 +69,7 @@ class StressTestSuite {
     const hugeInput = "p-[" + "A".repeat(100000) + "]";
     const startTime = Date.now();
     try {
-      const result = await zyraGenerateCSSFromClasses([hugeInput]);
+      const result = zyra.generate([hugeInput]);
       const processTime = Date.now() - startTime;
       this.log(
         "Buffer Overflow Protection",
@@ -99,7 +95,7 @@ class StressTestSuite {
     for (const pattern of redosPatterns) {
       const startTime = Date.now();
       try {
-        await zyraGenerateCSSFromClasses([pattern]);
+        zyra.generate([pattern]);
         const processTime = Date.now() - startTime;
         if (processTime < 1000) redosBlocked++; // Should process quickly or reject
       } catch (error) {
@@ -122,7 +118,7 @@ class StressTestSuite {
     const testClasses = ["p-[1rem]", "m-[2rem]", "bg-[red]"];
 
     for (let i = 0; i < 50; i++) {
-      concurrentPromises.push(zyraGenerateCSSFromClasses(testClasses));
+      concurrentPromises.push(zyra.generate(testClasses));
     }
 
     const startTime = Date.now();
@@ -147,7 +143,7 @@ class StressTestSuite {
 
     const memBefore = process.memoryUsage().heapUsed / 1024 / 1024;
     for (let i = 0; i < 1000; i++) {
-      await zyraGenerateCSSFromClasses([uniqueClasses[i]]);
+      zyra.generate([uniqueClasses[i]]);
     }
     const memAfter = process.memoryUsage().heapUsed / 1024 / 1024;
     const memIncrease = memAfter - memBefore;
@@ -164,7 +160,7 @@ class StressTestSuite {
     let cacheMisses = 0;
 
     for (let i = 0; i < 100; i++) {
-      const result = await zyraGenerateCSSFromClasses(["p-[1rem]"]);
+      const result = zyra.generate(["p-[1rem]"]);
       if (result.data.stats.fromCache) cacheHits++;
       else cacheMisses++;
     }
@@ -192,7 +188,7 @@ class StressTestSuite {
     let complexParsed = 0;
     for (const testCase of complexCases) {
       try {
-        const result = await zyraGenerateCSSFromClasses([testCase]);
+        const result = zyra.generate([testCase]);
         if (result.success && result.data.css.length > 50) {
           complexParsed++;
         }
@@ -220,7 +216,7 @@ class StressTestSuite {
       "h-[50vh]",
     ];
 
-    const result = await zyraGenerateCSSFromClasses(mixedClasses);
+    const result = zyra.generate(mixedClasses);
     const validCount = result.data.stats.validClasses;
     const invalidCount = result.data.stats.invalidClasses;
 
@@ -242,7 +238,7 @@ class StressTestSuite {
     let unicodeParsed = 0;
     for (const unicodeClass of unicodeClasses) {
       try {
-        const result = await zyraGenerateCSSFromClasses([unicodeClass]);
+        const result = zyra.generate([unicodeClass]);
         if (result.success) unicodeParsed++;
       } catch (error) {
         // Some unicode might be rejected, which is acceptable
@@ -275,7 +271,7 @@ class StressTestSuite {
     let correctMatches = 0;
     for (const testCase of edgeCases) {
       try {
-        const result = await zyraGenerateCSSFromClasses([testCase.pattern]);
+        const result = zyra.generate([testCase.pattern]);
         const actuallyValid = result.success && result.data.css.length > 10;
         if (actuallyValid === testCase.valid) correctMatches++;
       } catch (error) {
@@ -296,7 +292,7 @@ class StressTestSuite {
     }
 
     const regexStartTime = Date.now();
-    const regexResult = await zyraGenerateCSSFromClasses(manyPatterns);
+    const regexResult = zyra.generate(manyPatterns);
     const regexTime = Date.now() - regexStartTime;
 
     this.log(
@@ -316,7 +312,7 @@ class StressTestSuite {
     for (const pattern of maliciousPatterns) {
       const startTime = Date.now();
       try {
-        await zyraGenerateCSSFromClasses([pattern]);
+        zyra.generate([pattern]);
         if (Date.now() - startTime < 500) maliciousHandled++; // Fast processing
       } catch (error) {
         maliciousHandled++; // Properly rejected
@@ -340,7 +336,7 @@ class StressTestSuite {
     let errorsCaughtGracefully = 0;
     for (const badInput of errorCascade) {
       try {
-        const result = await zyraGenerateCSSFromClasses(badInput);
+        const result = zyra.generate(badInput);
         if (
           result.success === false ||
           (result.success && result.data.css === "")
@@ -362,7 +358,7 @@ class StressTestSuite {
     try {
       const massiveArray = new Array(1000000).fill("p-[1rem]");
       const startTime = Date.now();
-      const result = await zyraGenerateCSSFromClasses(massiveArray);
+      const result = zyra.generate(massiveArray);
       const processTime = Date.now() - startTime;
 
       this.log(
@@ -389,7 +385,7 @@ class StressTestSuite {
     let qualityErrors = 0;
     for (const test of errorTests) {
       try {
-        const result = await zyraGenerateCSSFromClasses(test.input);
+        const result = zyra.generate(test.input);
         if (!test.expectsError && result.success) qualityErrors++;
       } catch (error) {
         if (test.expectsError && error.message.length > 10) qualityErrors++;
@@ -414,7 +410,7 @@ class StressTestSuite {
     for (const scale of scales) {
       const classes = Array.from({ length: scale }, (_, i) => `p-[${i}rem]`);
       const startTime = Date.now();
-      await zyraGenerateCSSFromClasses(classes);
+      zyra.generate(classes);
       const duration = Date.now() - startTime;
       scalingResults.push(duration);
     }
@@ -431,7 +427,7 @@ class StressTestSuite {
     const memBefore = process.memoryUsage();
 
     for (let i = 0; i < 100; i++) {
-      await zyraGenerateCSSFromClasses([`test-[${i}px]`]);
+      zyra.generate([`test-[${i}px]`]);
     }
 
     const memAfter = process.memoryUsage();
@@ -448,9 +444,7 @@ class StressTestSuite {
     const promises = [];
 
     for (let i = 0; i < 20; i++) {
-      promises.push(
-        zyraGenerateCSSFromClasses(["p-[1rem]", "m-[2rem]", "bg-[red]"])
-      );
+      promises.push(zyra.generate(["p-[1rem]", "m-[2rem]", "bg-[red]"]));
     }
 
     await Promise.all(promises);
@@ -545,3 +539,4 @@ class StressTestSuite {
 // Run the advanced stress tests
 const stressTest = new StressTestSuite();
 await stressTest.runAllTests();
+

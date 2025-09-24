@@ -1,6 +1,6 @@
 /**
  * Build Command for ZyraCSS CLI
- * Clean, modular implementation supporting config files and watch mode
+ * Modular implementation supporting config files and watch mode
  */
 
 import fs from "fs/promises";
@@ -8,12 +8,9 @@ import path from "path";
 import { existsSync, mkdirSync } from "fs";
 import { dirname } from "path";
 
-import {
-  zyraGenerateCSS,
-  zyraGetVersion,
-  cleanupGlobalCache,
-  now,
-} from "zyracss";
+import { zyra } from "zyracss";
+// Direct internal imports for CLI efficiency
+import { zyraGetVersion, cleanupGlobalCache, now } from "zyracss/internal";
 
 import {
   loadConfig,
@@ -171,23 +168,16 @@ async function runBuild(config, startTime = now()) {
     try {
       const htmlInput = readResult.htmlContent.join("\n");
 
-      result = await Promise.race([
-        zyraGenerateCSS(
-          { html: htmlInput },
-          {
-            minify: config.minify,
-            groupSelectors: config.groupSelectors,
-            includeComments: !config.minify,
-          }
-        ),
-        new Promise((_, reject) =>
-          setTimeout(
-            () =>
-              reject(new Error("CSS generation timed out after 60 seconds")),
-            CSS_GENERATION_TIMEOUT
-          )
-        ),
-      ]);
+      // Since zyra.generate is now synchronous, we don't need Promise.race
+      // But we can still implement timeout using a simple timer if needed
+      result = zyra.generate(
+        { html: htmlInput },
+        {
+          minify: config.minify,
+          groupSelectors: config.groupSelectors,
+          includeComments: !config.minify,
+        }
+      );
     } catch (error) {
       if (error.message.includes("timed out")) {
         console.error(

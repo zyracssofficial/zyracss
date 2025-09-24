@@ -3,7 +3,7 @@
  * Tests various background property scenarios to validate implementation
  */
 
-import { zyraGenerateCSS } from "../src/index.js";
+import { zyra } from "../src/index.js";
 
 // Test cases for background validation
 const backgroundTests = [
@@ -180,7 +180,7 @@ async function runTests() {
     console.log(`   Class: ${test.class}`);
 
     try {
-      const result = await zyraGenerateCSS([test.class]);
+      const result = zyra.generate([test.class]);
 
       if (test.expected === null) {
         // This should fail
@@ -269,7 +269,7 @@ async function runTests() {
     console.log(`🔧 Testing ${test.property} with class: ${test.class}`);
 
     try {
-      const result = await zyraGenerateCSS([test.class]);
+      const result = zyra.generate([test.class]);
 
       if (result.success && result.data?.css) {
         const css = result.data.css.trim();
@@ -289,3 +289,4 @@ async function runTests() {
 
 // Run the tests
 runTests().catch(console.error);
+

@@ -3,16 +3,6 @@
  * Non-security related constants and configuration
  */
 
-// Version info with fallback to prevent module loading issues
-const VERSION_INFO = {
-  version: "0.1.0",
-  major: 0,
-  minor: 1,
-  patch: 0,
-  name: "zyracss",
-  FULL: "0.1.0",
-};
-
 // CSS unit types
 export const CSS_UNITS = {
   LENGTH: [
@@ -90,10 +80,6 @@ export const PROCESSING_CONSTANTS = {
   NUMBER_RANGE_MIN: 1,
   NUMBER_RANGE_MAX: 1000,
 };
-
-// Error codes for consistent error handling
-// Version information
-export { VERSION_INFO };
 
 // Debug levels
 export const DEBUG_LEVELS = {

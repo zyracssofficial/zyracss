@@ -63,7 +63,6 @@ export {
   CSS_UNITS,
   PROCESSING_CONSTANTS,
   CACHE_CONSTANTS,
-  VERSION_INFO,
   DEBUG_LEVELS,
 } from "./constants.js";
 

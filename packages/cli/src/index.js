@@ -4,32 +4,32 @@ import { Command } from "commander";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import { zyraGetVersion } from "zyracss";
+import { zyraGetVersion } from "zyracss/internal";
 import buildCommand from "./commands/build.js";
 import watchCommand from "./commands/watch.js";
 
 // Get package version dynamically
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const packageJson = JSON.parse(readFileSync(join(__dirname, "../package.json"), "utf8"));
+const packageJson = JSON.parse(
+  readFileSync(join(__dirname, "../package.json"), "utf8")
+);
 
 const program = new Command();
 
-program
-  .name("zyracss")
-  .description("ZyraCSS - A utility-first CSS generator");
+program.name("zyracss").description("ZyraCSS - A utility-first CSS generator");
 
 // Custom version option that shows both CLI and core versions
 program
-  .option('-V, --version', 'show version information')
+  .option("-V, --version", "show version information")
   .action(async (options) => {
     // If version flag is provided, show both versions
     if (options.version) {
       const cliVersion = packageJson.version;
       try {
-        const coreVersion = await zyraGetVersion();
+        const coreVersion = zyraGetVersion();
         console.log(`@zyracss/cli: ${cliVersion}`);
-        console.log(`zyracss: ${coreVersion.version || coreVersion}`);
+        console.log(`zyracss: ${coreVersion}`);
       } catch (error) {
         console.log(`@zyracss/cli: ${cliVersion}`);
         console.log(`zyracss: unable to detect version (${error.message})`);

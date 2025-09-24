@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { zyraCSSManager } from "zyracss";
+import { zyra } from "zyracss";
 
 // Sample design specifications (could come from AI, API, or user input)
 const designSpecs = {
@@ -55,7 +55,7 @@ function AIGeneratedCard({ spec, title, content }) {
 
   useEffect(() => {
     const generatedClasses = designToClasses(spec);
-    zyraCSSManager.processClasses(generatedClasses);
+    zyra.inject(generatedClasses);
     setClasses(generatedClasses.join(" "));
   }, [spec]);
 
@@ -77,7 +77,7 @@ function App() {
 
   // Process static layout styles once
   useEffect(() => {
-    zyraCSSManager.processClasses([
+    zyra.inject([
       "min-h-[100vh]",
       "bg-[#f8fafc]",
       "p-[2rem]",

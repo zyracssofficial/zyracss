@@ -57,3 +57,4 @@ await fs.unlink("large-content-test.html");
 if (fs.existsSync && fs.existsSync("output.css")) {
   await fs.unlink("output.css");
 }
+

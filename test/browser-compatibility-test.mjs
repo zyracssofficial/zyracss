@@ -8,12 +8,7 @@
 global.process = undefined;
 global.require = undefined;
 
-import {
-  zyraGenerateCSS,
-  zyraGenerateCSSFromHTML,
-  zyraExtractClassFromHTML,
-  parseClasses,
-} from "../src/index.js";
+import { zyra } from "../src/index.js";
 
 console.log("🌐 ZyraCSS Browser Environment Test");
 console.log("=".repeat(50));
@@ -23,11 +18,7 @@ async function testBrowserCompatibility() {
 
   // Test 1: Basic CSS Generation
   try {
-    const result = await zyraGenerateCSS([
-      "p-[20px]",
-      "bg-[#ff0000]",
-      "color-[blue]",
-    ]);
+    const result = zyra.generate(["p-[20px]", "bg-[#ff0000]", "color-[blue]"]);
     const success = result.success && result.data.css.includes("padding: 20px");
     tests.push({ name: "Basic CSS Generation", success });
     console.log(success ? "✅" : "❌", "Basic CSS Generation");
@@ -40,26 +31,26 @@ async function testBrowserCompatibility() {
     console.log("❌ Basic CSS Generation:", error.message);
   }
 
-  // Test 2: HTML Class Extraction
+  // Test 2: HTML Processing (via css method)
   try {
     const html = '<div class="p-[10px] bg-[red] color-[white]">Test</div>';
-    const classes = zyraExtractClassFromHTML(html);
-    const success = classes.length === 3 && classes.includes("p-[10px]");
-    tests.push({ name: "HTML Class Extraction", success });
-    console.log(success ? "✅" : "❌", "HTML Class Extraction");
+    const result = zyra.generate(html);
+    const success = result.success && result.data.css.includes("padding: 10px");
+    tests.push({ name: "HTML Processing", success });
+    console.log(success ? "✅" : "❌", "HTML Processing");
   } catch (error) {
     tests.push({
-      name: "HTML Class Extraction",
+      name: "HTML Processing",
       success: false,
       error: error.message,
     });
-    console.log("❌ HTML Class Extraction:", error.message);
+    console.log("❌ HTML Processing:", error.message);
   }
 
   // Test 3: CSS from HTML
   try {
     const html = '<div class="margin-[15px] font-size-[18px]">Content</div>';
-    const result = await zyraGenerateCSSFromHTML(html);
+    const result = zyra.generate(html);
     const success = result.success && result.data.css.includes("margin: 15px");
     tests.push({ name: "CSS from HTML", success });
     console.log(success ? "✅" : "❌", "CSS from HTML");
@@ -68,10 +59,10 @@ async function testBrowserCompatibility() {
     console.log("❌ CSS from HTML:", error.message);
   }
 
-  // Test 4: Class Parsing
+  // Test 4: Class Parsing via CSS Generation
   try {
-    const result = parseClasses(["w-[100px]", "h-[50vh]", "invalid-class"]);
-    const success = result.hasAnyValid && result.valid.length >= 2;
+    const result = zyra.generate(["w-[100px]", "h-[50vh]", "invalid-class"]);
+    const success = result.success && result.data.stats.validClasses >= 2;
     tests.push({ name: "Class Parsing", success });
     console.log(success ? "✅" : "❌", "Class Parsing");
   } catch (error) {
@@ -86,7 +77,7 @@ async function testBrowserCompatibility() {
       "bg-[linear-gradient(45deg,#ff0000,#0000ff)]",
       "box-shadow-[0,4px,8px,rgba(0,0,0,0.3)]",
     ];
-    const result = await zyraGenerateCSS(complexClasses);
+    const result = zyra.generate(complexClasses);
     const success = result.success && result.data.css.includes("transform:");
     tests.push({ name: "Complex Values", success });
     console.log(success ? "✅" : "❌", "Complex Values");
@@ -105,12 +96,12 @@ async function testBrowserCompatibility() {
 
     // First call
     const start1 = Date.now();
-    const result1 = await zyraGenerateCSS(classes);
+    const result1 = zyra.generate(classes);
     const time1 = Date.now() - start1;
 
     // Second call (should be cached)
     const start2 = Date.now();
-    const result2 = await zyraGenerateCSS(classes);
+    const result2 = zyra.generate(classes);
     const time2 = Date.now() - start2;
 
     const success =
@@ -152,3 +143,4 @@ async function testBrowserCompatibility() {
 }
 
 testBrowserCompatibility().catch(console.error);
+

@@ -3,7 +3,7 @@
  * Tests all aspects of font shorthand including Google Fonts, system fonts, and edge cases
  */
 
-import { zyraGenerateCSS } from "../src/index.js";
+import { zyra } from "../src/index.js";
 
 async function runFontShorthandTests() {
   console.log("🔤 Comprehensive Font Shorthand Test Suite");
@@ -311,7 +311,7 @@ async function runFontShorthandTests() {
       console.log(`   Class: ${test.class}`);
 
       try {
-        const result = await zyraGenerateCSS([test.class]);
+        const result = zyra.generate([test.class]);
 
         if (test.expected === null) {
           // This should fail
@@ -386,3 +386,4 @@ async function runFontShorthandTests() {
 }
 
 runFontShorthandTests().catch(console.error);
+

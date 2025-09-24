@@ -1,9 +1,12 @@
 /**
  * ZyraCSS Vite Plugin
  * Enables @import "zyracss" directive in CSS files
+ * Updated to use modern zyra namespace API
  */
 
-import { zyraGenerateCSS, zyraExtractClassFromHTML } from "zyracss";
+import { zyra } from "zyracss";
+// Direct internal import for Vite plugin efficiency
+import { zyraExtractClassFromHTML } from "zyracss/internal";
 import fs from "fs";
 import path from "path";
 
@@ -87,7 +90,7 @@ export function zyracss(userConfig = {}) {
       }
     },
 
-    async scanForClasses() {
+    scanForClasses() {
       const allClasses = new Set();
 
       // Simple file scanner that works without additional dependencies
@@ -188,7 +191,7 @@ export function zyracss(userConfig = {}) {
       return Array.from(allClasses);
     },
 
-    async generateZyraCSS() {
+    generateZyraCSS() {
       const now = Date.now();
 
       if (cachedCSS && now - lastScanTime < 100) {
@@ -198,7 +201,7 @@ export function zyracss(userConfig = {}) {
         return cachedCSS;
       }
 
-      const classes = await this.scanForClasses();
+      const classes = this.scanForClasses();
 
       if (config.debug) {
         console.log(`🎨 ZyraCSS: Found ${classes.length} classes to process`);
@@ -214,7 +217,7 @@ export function zyracss(userConfig = {}) {
       }
 
       try {
-        const result = await zyraGenerateCSS(classes, {
+        const result = zyra.generate(classes, {
           minify: config.minify,
           groupSelectors: true,
         });
@@ -246,11 +249,11 @@ export function zyracss(userConfig = {}) {
 
     async transform(code, id) {
       if (id === "\0virtual:zyracss.css") {
-        return await plugin.generateZyraCSS();
+        return plugin.generateZyraCSS();
       }
 
       if (id.endsWith(".css") && code.includes('@import "zyracss"')) {
-        const generatedCSS = await plugin.generateZyraCSS();
+        const generatedCSS = plugin.generateZyraCSS();
 
         if (config.output === "file") {
           const outputDir = path.dirname(config.outputPath);

@@ -4,11 +4,7 @@
  * Detailed testing with specific examples for each category
  */
 
-import {
-  zyraGenerateCSSFromClasses,
-  zyraGenerateCSSFromHTML,
-  parseClasses,
-} from "../src/index.js";
+import { zyra } from "../src/index.js";
 import { globalCache } from "../src/core/cache/index.js";
 
 console.log("🎯 ZyraCSS Category-Focused Test Suite");
@@ -28,7 +24,7 @@ const securityTests = [
 
 for (const malicious of securityTests) {
   try {
-    const result = await zyraGenerateCSSFromClasses([malicious]);
+    const result = zyra.generate([malicious]);
     const safe =
       !result.data.css.includes("javascript:") &&
       !result.data.css.includes("expression(") &&
@@ -48,12 +44,12 @@ const cacheTestClasses = ["p-[2rem]", "m-[1rem]", "bg-[#ff0000]"];
 
 // First call (cache miss)
 const t1 = Date.now();
-const result1 = await zyraGenerateCSSFromClasses(cacheTestClasses);
+const result1 = zyra.generate(cacheTestClasses);
 const miss_time = Date.now() - t1;
 
 // Second call (cache hit)
 const t2 = Date.now();
-const result2 = await zyraGenerateCSSFromClasses(cacheTestClasses);
+const result2 = zyra.generate(cacheTestClasses);
 const hit_time = Date.now() - t2;
 
 console.log(
@@ -87,7 +83,7 @@ const parsingTests = [
 
 for (const test of parsingTests) {
   try {
-    const result = await zyraGenerateCSSFromClasses([test.class]);
+    const result = zyra.generate([test.class]);
     const hasExpected = result.data.css.includes(test.expect);
     console.log(
       `${hasExpected ? "✅" : "❌"} ${test.class} → ${hasExpected ? "Parsed correctly" : "Parse failed"}`
@@ -123,7 +119,7 @@ const regexTests = [
 
 for (const test of regexTests) {
   try {
-    const result = await zyraGenerateCSSFromClasses([test.pattern]);
+    const result = zyra.generate([test.pattern]);
     const actuallyMatched = result.success && result.data.css.length > 10;
     const correct = actuallyMatched === test.shouldMatch;
     console.log(
@@ -156,7 +152,7 @@ const errorTests = [
 
 for (const test of errorTests) {
   try {
-    const result = await zyraGenerateCSSFromClasses(test.input);
+    const result = zyra.generate(test.input);
     const handled = result.success !== undefined; // Has proper result structure
     console.log(
       `✅ ${test.desc} → ${handled ? "Gracefully handled" : "Unexpected format"}`
@@ -180,28 +176,28 @@ console.log("─".repeat(50));
 // Small set performance
 const smallClasses = ["p-[1rem]", "m-[2rem]", "bg-[red]"];
 const smallStart = Date.now();
-await zyraGenerateCSSFromClasses(smallClasses);
+zyra.generate(smallClasses);
 const smallTime = Date.now() - smallStart;
 console.log(`✅ Small Set (3 classes): ${smallTime}ms`);
 
 // Medium set performance
 const mediumClasses = Array.from({ length: 20 }, (_, i) => `p-[${i + 1}rem]`);
 const mediumStart = Date.now();
-await zyraGenerateCSSFromClasses(mediumClasses);
+zyra.generate(mediumClasses);
 const mediumTime = Date.now() - mediumStart;
 console.log(`✅ Medium Set (20 classes): ${mediumTime}ms`);
 
 // Large set performance
 const largeClasses = Array.from({ length: 100 }, (_, i) => `p-[${i + 1}rem]`);
 const largeStart = Date.now();
-await zyraGenerateCSSFromClasses(largeClasses);
+zyra.generate(largeClasses);
 const largeTime = Date.now() - largeStart;
 console.log(`✅ Large Set (100 classes): ${largeTime}ms`);
 
 // Memory usage
 const memBefore = process.memoryUsage().heapUsed / 1024 / 1024;
 for (let i = 0; i < 50; i++) {
-  await zyraGenerateCSSFromClasses([`test-${i}-[${i}px]`]);
+  zyra.generate([`test-${i}-[${i}px]`]);
 }
 const memAfter = process.memoryUsage().heapUsed / 1024 / 1024;
 console.log(
@@ -219,3 +215,4 @@ console.log("✅ PERFORMANCE: Sub-millisecond small sets, efficient scaling");
 console.log(
   "\n🚀 ZyraCSS is robust and production-ready across all categories!"
 );
+

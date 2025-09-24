@@ -32,14 +32,6 @@ class ZyraCSSManager {
   }
 
   /**
-   * Configure debug logging
-   * @param {boolean} enabled - Enable or disable debug output
-   */
-  setDebug(enabled) {
-    this.debug = enabled;
-  }
-
-  /**
    * Initialize the browser manager
    */
   init() {
@@ -137,7 +129,7 @@ class ZyraCSSManager {
   /**
    * Process classes with proper class-level deduplication
    */
-  async processClasses(classes, options = {}) {
+  processClasses(classes, options = {}) {
     // Normalize input
     const classArray = Array.isArray(classes) ? classes : [classes];
 
@@ -166,7 +158,7 @@ class ZyraCSSManager {
 
     try {
       // Process only the new classes - use core API directly
-      const result = await zyraGenerateCSS(newClasses, options);
+      const result = zyraGenerateCSS(newClasses, options);
       const css = result.success ? result.data.css : "";
 
       if (css && css.trim()) {
@@ -203,17 +195,6 @@ class ZyraCSSManager {
       this.logger.debug("🧹 Cleared all processed classes and CSS rules");
     }
     return this;
-  }
-
-  /**
-   * Get current stats
-   */
-  getStats() {
-    return {
-      processedClasses: this.processedClasses.size,
-      cssRules: this.cssRules.size,
-      initialized: this.isInitialized,
-    };
   }
 }
 

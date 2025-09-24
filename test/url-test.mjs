@@ -1,4 +1,4 @@
-import { zyraGenerateCSS } from "../src/index.js";
+import { zyra } from "../src/index.js";
 
 /**
  * Test suite for URL support with u(...) syntax
@@ -106,7 +106,7 @@ async function runTests() {
       console.log(`\n📋 Testing: ${testCase.name}`);
       console.log(`   Class: ${testCase.className}`);
 
-      const result = await zyraGenerateCSS({
+      const result = zyra.generate({
         classes: [testCase.className],
       });
 
@@ -193,3 +193,4 @@ async function runTests() {
 }
 
 runTests().catch(console.error);
+

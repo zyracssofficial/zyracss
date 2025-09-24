@@ -31,7 +31,7 @@ export function validateGenerateInput(input, options = {}) {
     if (!htmlValidation.success) return htmlValidation;
 
     return ZyraResult.success({
-      input: [input],
+      input, // Keep as string, don't wrap in array
       options: validateOptions(options),
     });
   }
@@ -133,7 +133,7 @@ export function validateClassesInput(classes) {
  * @param {string|Array<string>} html - HTML to validate
  * @returns {ZyraResult} Validation result
  */
-export function validateHTMLInput(html) {
+function validateHTMLInput(html) {
   // Single HTML string
   if (typeof html === "string") {
     return ZyraResult.success(html);

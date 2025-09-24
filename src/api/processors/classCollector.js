@@ -43,9 +43,9 @@ export function processHTMLInput(html = []) {
  * Collect all classes from processed inputs
  * @param {Array} processedClasses - Processed class array
  * @param {Array} processedHTML - Processed HTML strings
- * @returns {Promise<ZyraResult>} Result with collected classes
+ * @returns {ZyraResult} Result with collected classes
  */
-export async function collectAllClasses(processedClasses, processedHTML) {
+export function collectAllClasses(processedClasses, processedHTML) {
   try {
     const allClasses = [...processedClasses];
     let extractedCount = 0;

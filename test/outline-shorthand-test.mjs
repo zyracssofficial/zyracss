@@ -1,4 +1,4 @@
-import { zyraGenerateCSSFromClasses } from "../src/index.js";
+import { zyra } from "../src/index.js";
 
 console.log("🧪 ZyraCSS Outline Shorthand Validation Test Suite");
 console.log("=".repeat(60));
@@ -9,11 +9,11 @@ let passedTests = 0;
 /**
  * Helper function to test outline shorthand validation
  */
-async function testOutlineShorthand(className, expected, description) {
+function testOutlineShorthand(className, expected, description) {
   testCount++;
 
   try {
-    const result = await zyraGenerateCSSFromClasses([className]);
+    const result = zyra.generate([className]);
 
     // Check if CSS was actually generated (this indicates validation passed)
     const isValid =
@@ -60,221 +60,181 @@ async function testOutlineShorthand(className, expected, description) {
 }
 
 // Test Suite
-async function runOutlineTests() {
+function runOutlineTests() {
   console.log("📋 Testing Valid Outline Values:");
   console.log("-".repeat(40));
 
   // Basic valid combinations (using comma syntax)
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[2px,solid,red]",
     true,
     "Width + Style + Color"
   );
-  await testOutlineShorthand(
-    "outline-[solid,red]",
-    true,
-    "Style + Color (no width)"
-  );
-  await testOutlineShorthand(
-    "outline-[2px,red]",
-    true,
-    "Width + Color (no style)"
-  );
-  await testOutlineShorthand(
-    "outline-[2px,solid]",
-    true,
-    "Width + Style (no color)"
-  );
-  await testOutlineShorthand("outline-[solid]", true, "Style only");
-  await testOutlineShorthand("outline-[red]", true, "Color only");
-  await testOutlineShorthand("outline-[2px]", true, "Width only");
+  testOutlineShorthand("outline-[solid,red]", true, "Style + Color (no width)");
+  testOutlineShorthand("outline-[2px,red]", true, "Width + Color (no style)");
+  testOutlineShorthand("outline-[2px,solid]", true, "Width + Style (no color)");
+  testOutlineShorthand("outline-[solid]", true, "Style only");
+  testOutlineShorthand("outline-[red]", true, "Color only");
+  testOutlineShorthand("outline-[2px]", true, "Width only");
 
   // Different order combinations
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[red,solid,2px]",
     true,
     "Color + Style + Width"
   );
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[solid,2px,red]",
     true,
     "Style + Width + Color"
   );
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[red,2px,solid]",
     true,
     "Color + Width + Style"
   );
 
   // Outline-specific styles
-  await testOutlineShorthand(
-    "outline-[auto]",
-    true,
-    "Auto style (outline-specific)"
-  );
-  await testOutlineShorthand(
+  testOutlineShorthand("outline-[auto]", true, "Auto style (outline-specific)");
+  testOutlineShorthand(
     "outline-[2px,auto,red]",
     true,
     "Width + Auto style + Color"
   );
-  await testOutlineShorthand("outline-[auto,red]", true, "Auto style + Color");
+  testOutlineShorthand("outline-[auto,red]", true, "Auto style + Color");
 
   // Outline-specific colors
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[invert]",
     true,
     "Invert color (outline-specific)"
   );
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[2px,solid,invert]",
     true,
     "Width + Style + Invert color"
   );
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[auto,invert]",
     true,
     "Auto style + Invert color"
   );
 
   // CSS variables
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[var(--outline-width),solid,red]",
     true,
     "CSS variable width"
   );
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[2px,var(--outline-style),red]",
     true,
     "CSS variable style"
   );
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[2px,solid,var(--outline-color)]",
     true,
     "CSS variable color"
   );
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[var(--full-outline)]",
     true,
     "Full CSS variable"
   );
 
   // Complex colors
-  await testOutlineShorthand(
-    "outline-[2px,solid,rgb(255,0,0)]",
-    true,
-    "RGB color"
-  );
-  await testOutlineShorthand(
+  testOutlineShorthand("outline-[2px,solid,rgb(255,0,0)]", true, "RGB color");
+  testOutlineShorthand(
     "outline-[2px,solid,rgba(255,0,0,0.5)]",
     true,
     "RGBA color"
   );
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[2px,solid,hsl(0,100%,50%)]",
     true,
     "HSL color"
   );
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[2px,solid,hsla(0,100%,50%,0.8)]",
     true,
     "HSLA color"
   );
 
   // Length units
-  await testOutlineShorthand("outline-[1em,solid,red]", true, "Em width unit");
-  await testOutlineShorthand(
-    "outline-[0.5rem,solid,red]",
-    true,
-    "Rem width unit"
-  );
-  await testOutlineShorthand(
-    "outline-[3pt,solid,red]",
-    true,
-    "Point width unit"
-  );
-  await testOutlineShorthand(
+  testOutlineShorthand("outline-[1em,solid,red]", true, "Em width unit");
+  testOutlineShorthand("outline-[0.5rem,solid,red]", true, "Rem width unit");
+  testOutlineShorthand("outline-[3pt,solid,red]", true, "Point width unit");
+  testOutlineShorthand(
     "outline-[medium,solid,red]",
     true,
     "Named width (medium)"
   );
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[thick,solid,red]",
     true,
     "Named width (thick)"
   );
-  await testOutlineShorthand(
-    "outline-[thin,solid,red]",
-    true,
-    "Named width (thin)"
-  );
+  testOutlineShorthand("outline-[thin,solid,red]", true, "Named width (thin)");
 
   // Standard CSS keywords
-  await testOutlineShorthand("outline-[initial]", true, "Initial keyword");
-  await testOutlineShorthand("outline-[inherit]", true, "Inherit keyword");
-  await testOutlineShorthand("outline-[unset]", true, "Unset keyword");
+  testOutlineShorthand("outline-[initial]", true, "Initial keyword");
+  testOutlineShorthand("outline-[inherit]", true, "Inherit keyword");
+  testOutlineShorthand("outline-[unset]", true, "Unset keyword");
 
   console.log("📋 Testing Invalid Outline Values:");
   console.log("-".repeat(40));
 
   // Invalid combinations
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[2px,2px,solid,red]",
     false,
     "Duplicate width values"
   );
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[solid,dashed,red]",
     false,
     "Duplicate style values"
   );
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[red,blue,solid]",
     false,
     "Duplicate color values"
   );
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[2px,solid,red,green]",
     false,
     "Too many values (4)"
   );
 
   // Invalid individual values
-  await testOutlineShorthand(
-    "outline-[xyz,solid,red]",
-    false,
-    "Invalid width value"
-  );
-  await testOutlineShorthand(
+  testOutlineShorthand("outline-[xyz,solid,red]", false, "Invalid width value");
+  testOutlineShorthand(
     "outline-[2px,invalid,red]",
     false,
     "Invalid style value"
   );
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[2px,solid,invalidcolor]",
     false,
     "Invalid color value"
   );
 
   // Invalid syntax
-  await testOutlineShorthand("outline-[]", false, "Empty value");
-  await testOutlineShorthand(
+  testOutlineShorthand("outline-[]", false, "Empty value");
+  testOutlineShorthand(
     "outline-[2px solid red]",
     false,
     "Space-separated values (should use commas)"
   );
 
   // Edge cases
-  await testOutlineShorthand(
+  testOutlineShorthand(
     "outline-[0,none,transparent]",
     true,
     "Zero width with none style"
   );
-  await testOutlineShorthand("outline-[none]", true, "None style only");
-  await testOutlineShorthand(
-    "outline-[transparent]",
-    true,
-    "Transparent color only"
-  );
+  testOutlineShorthand("outline-[none]", true, "None style only");
+  testOutlineShorthand("outline-[transparent]", true, "Transparent color only");
 
   // Summary
   console.log("=".repeat(60));
@@ -301,11 +261,10 @@ async function runOutlineTests() {
 }
 
 // Run the test suite
-runOutlineTests()
-  .then((success) => {
-    process.exit(success ? 0 : 1);
-  })
-  .catch((error) => {
-    console.error("Test suite failed:", error);
-    process.exit(1);
-  });
+try {
+  const success = runOutlineTests();
+  process.exit(success ? 0 : 1);
+} catch (error) {
+  console.error("Test suite failed:", error);
+  process.exit(1);
+}

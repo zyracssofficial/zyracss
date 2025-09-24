@@ -24,7 +24,7 @@ import { ZyraResult, ErrorFactory } from "../../core/errors/essential.js";
  * @param {Object} options - Configuration options
  * @returns {ZyraResult} Result with CSS and metadata
  */
-export async function zyraGenerateCSS(input, options = {}) {
+export function zyraGenerateCSS(input, options = {}) {
   const timer = createTimer("zyraGenerateCSS").start();
 
   try {
@@ -58,7 +58,7 @@ export async function zyraGenerateCSS(input, options = {}) {
     }
 
     // Step 3: Collect all classes from various sources
-    const allClassesResult = await collectAllClasses(
+    const allClassesResult = collectAllClasses(
       classesResult.processed || [],
       htmlToProcess
     );
@@ -75,7 +75,7 @@ export async function zyraGenerateCSS(input, options = {}) {
     }
 
     // Step 5: Generate CSS from validated classes
-    const cssResult = await zyraGenerateCSSFromValidatedClasses(
+    const cssResult = zyraGenerateCSSFromValidatedClasses(
       securityResult.data.validClasses,
       validatedInput.data.options,
       timer

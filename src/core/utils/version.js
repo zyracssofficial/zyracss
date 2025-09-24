@@ -2,8 +2,6 @@
  * Version utilities with fallback for async environments
  */
 
-import { ZyraError, ERROR_CODES } from "../errors/index.js";
-
 // Check if we're in a browser environment with proper feature detection
 const isBrowser = (() => {
   try {
@@ -25,12 +23,12 @@ let packageInfo = null;
 
 // Synchronous fallback version info
 const FALLBACK_VERSION = {
-  version: "0.1.3",
+  version: "0.2.0",
   major: 0,
-  minor: 1,
-  patch: 3,
+  minor: 2,
+  patch: 0,
   name: "zyracss",
-  FULL: "0.1.3",
+  FULL: "0.2.0",
 };
 
 function loadPackageInfo() {

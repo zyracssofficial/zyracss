@@ -2,6 +2,82 @@
 
 All notable changes to the ZyraCSS project are documented in this file.
 
+## [0.2.0] - Major API Modernization
+
+### **MAJOR CHANGES**
+
+**API Modernization**
+
+- **Async-to-Sync Conversion**: All API methods are now synchronous for better performance and simpler usage
+- **Method Renaming**:
+  - `zyra.css()` → `zyra.generate()` (more descriptive naming)
+  - `zyra.runtime()` → `zyra.inject()` (clearer browser functionality)
+  - `zyra.engine()` → `zyra.createEngine()` (explicit factory pattern)
+- **API Consolidation**: Reduced from 16 methods to 3 clean, focused methods
+- **Simplified Imports**: Single `zyra` namespace with consistent structure
+
+### **NEW FEATURES**
+
+**Internal API Architecture**
+
+- **Package Internal API**: New `zyracss/internal` export for official packages
+- **Curated Utilities**: 7 essential utilities available for CLI and Vite packages
+- **Direct Imports**: Clean import strategy eliminating deep module paths
+- **TypeScript Integration**: Complete type definitions for internal API
+
+**Enhanced Package Ecosystem**
+
+- **Modern Exports**: All packages now use contemporary Node.js exports maps
+- **TypeScript Support**: Enhanced type definitions across all packages
+- **Development Experience**: Improved imports and package structure
+
+### **IMPROVEMENTS**
+
+**CLI Package (`@zyracss/cli`)**
+
+- Migrated from deep imports to `zyracss/internal` API
+- Fixed legacy property access patterns (`zyra.constants.*`, `zyra.utils.*`)
+- Enhanced TypeScript support with proper type definitions
+- Modernized package.json with exports map
+
+**Vite Plugin (`@zyracss/vite`)**
+
+- Updated to use internal API for parser utilities
+- Enhanced TypeScript definitions for better developer experience
+- Improved package exports structure
+
+**Core Package (`zyracss`)**
+
+- Created internal API with curated utility exports
+- Cleaned up package exports (removed unused browser export)
+- Optimized internal utility surface (reduced from 24 to 7 exports)
+- Enhanced TypeScript definitions
+
+### **CODE QUALITY**
+
+**Architecture Cleanup**
+
+- Removed dead code and unused exports
+- Fixed syntax corruption in build files
+- Optimized import strategies across packages
+- Eliminated over-engineering in internal utilities
+
+### **⚡ PERFORMANCE**
+
+**Synchronous Operations**
+
+- Eliminated async overhead for better performance
+- Faster CSS generation without Promise overhead
+- Improved CLI build times
+
+**Optimized Imports**
+
+- Reduced bundle size through selective internal exports
+- Better tree-shaking with modern exports maps
+- Minimal import footprint for packages
+
+---
+
 ## [0.1.0] - Initial Release
 
 ### **Core Features**

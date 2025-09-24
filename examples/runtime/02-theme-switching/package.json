@@ -1,7 +1,7 @@
 {
   "name": "zyracss-runtime-theme-switching",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,7 +11,7 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "zyracss": "^0.1.3"
+    "zyracss": "^0.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

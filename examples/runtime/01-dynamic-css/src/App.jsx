@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { zyraCSSManager } from "zyracss";
+import { zyra } from "zyracss";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -8,7 +8,7 @@ function App() {
 
   // Process static styles once
   useEffect(() => {
-    zyraCSSManager.processClasses([
+    zyra.inject([
       "min-h-[100vh]",
       "bg-[#f8fafc]",
       "p-[2rem]",
@@ -68,7 +68,7 @@ function App() {
       `box-shadow-[0,${count > 5 ? "8" : "4"}px,${count > 5 ? "16" : "8"}px,rgba(0,0,0,0.2)]`,
     ];
 
-    zyraCSSManager.processClasses(dynamicClasses);
+    zyra.inject(dynamicClasses);
   }, [count, isActive, buttonColor]);
 
   const buttonClass = `p-[1rem,2rem] border-[none] border-radius-[8px] font-weight-[600] cursor-[pointer] transition-[all,0.3s,ease] bg-[${isActive ? buttonColor : "#64748b"}] c-[white] transform-[${isActive ? "scale(1.05)" : "scale(1)"}]`;

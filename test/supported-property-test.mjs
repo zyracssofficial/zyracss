@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import { execSync } from "child_process";
-import path from "path";
 
 const categories = [
   "animation",
@@ -97,3 +96,4 @@ results
       `${rank}. ${emoji} ${result.category.toUpperCase()}: ${result.percentage}% (${result.passed}/${result.tests})`
     );
   });
+

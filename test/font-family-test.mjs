@@ -8,7 +8,7 @@
  * - Font names with underscores/spaces
  */
 
-import { zyraGenerateCSSFromClasses } from "../src/index.js";
+import { zyra } from "../src/index.js";
 
 console.log("🔤 ZyraCSS Font Family Test Suite");
 console.log("=================================");
@@ -17,65 +17,56 @@ let passed = 0;
 let failed = 0;
 
 function testFont(className, expectedCSS, description) {
-  return zyraGenerateCSSFromClasses([className])
-    .then((result) => {
-      if (result.success && result.data.css.includes(expectedCSS)) {
-        console.log(`✅ ${description}`);
-        console.log(`   ${className} → ${expectedCSS}`);
-        passed++;
-        return true;
-      } else {
-        console.log(`❌ ${description}`);
-        console.log(`   ${className} → Expected: ${expectedCSS}`);
-        console.log(`   Got: ${result.data?.css || "No CSS generated"}`);
-        failed++;
-        return false;
-      }
-    })
-    .catch((error) => {
+  try {
+    const result = zyra.generate([className]);
+    if (result.success && result.data.css.includes(expectedCSS)) {
+      console.log(`✅ ${description}`);
+      console.log(`   ${className} → ${expectedCSS}`);
+      passed++;
+      return true;
+    } else {
       console.log(`❌ ${description}`);
-      console.log(`   ${className} → Error: ${error.message}`);
+      console.log(`   ${className} → Expected: ${expectedCSS}`);
+      console.log(`   Got: ${result.data?.css || "No CSS generated"}`);
       failed++;
       return false;
-    });
+    }
+  } catch (error) {
+    console.log(`❌ ${description}`);
+    console.log(`   ${className} → Error: ${error.message}`);
+    failed++;
+    return false;
+  }
 }
 
-async function runFontTests() {
+function runFontTests() {
   console.log("\n📝 System Font Tests:");
   console.log("─────────────────────");
 
   // Test basic system fonts - ZyraCSS quotes all non-generic fonts for safety
-  await testFont("ff-[Arial]", 'font-family: "Arial"', "Basic Arial font");
-  await testFont(
-    "font-family-[Arial]",
-    'font-family: "Arial"',
-    "Font-family Arial"
-  );
-  await testFont(
-    "ff-[Helvetica]",
-    'font-family: "Helvetica"',
-    "Helvetica font"
-  );
-  await testFont("ff-[Times]", 'font-family: "Times"', "Times font");
+  testFont("ff-[Arial]", 'font-family: "Arial"', "Basic Arial font");
+  testFont("font-family-[Arial]", 'font-family: "Arial"', "Font-family Arial");
+  testFont("ff-[Helvetica]", 'font-family: "Helvetica"', "Helvetica font");
+  testFont("ff-[Times]", 'font-family: "Times"', "Times font");
 
   console.log("\n🌐 Google Fonts Tests (should be quoted and capitalized):");
   console.log("──────────────────────────────────────────────────────");
 
   // Test Google fonts - should have proper capitalization and quotes
-  await testFont("ff-[inter]", 'font-family: "Inter"', "Inter Google font");
-  await testFont("ff-[roboto]", 'font-family: "Roboto"', "Roboto Google font");
-  await testFont(
+  testFont("ff-[inter]", 'font-family: "Inter"', "Inter Google font");
+  testFont("ff-[roboto]", 'font-family: "Roboto"', "Roboto Google font");
+  testFont(
     "ff-[open-sans]",
     'font-family: "Open Sans"',
     "Open Sans with dashes"
   );
-  await testFont(
+  testFont(
     "ff-[source-code-pro]",
     'font-family: "Source Code Pro"',
     "Source Code Pro"
   );
-  await testFont("ff-[noto-sans]", 'font-family: "Noto Sans"', "Noto Sans");
-  await testFont(
+  testFont("ff-[noto-sans]", 'font-family: "Noto Sans"', "Noto Sans");
+  testFont(
     "ff-[playfair-display]",
     'font-family: "Playfair Display"',
     "Playfair Display"
@@ -85,22 +76,22 @@ async function runFontTests() {
   console.log("───────────────────────────");
 
   // Test multiple fonts with fallbacks - system fonts are quoted, generics are not
-  await testFont(
+  testFont(
     "ff-[inter,sans-serif]",
     'font-family: "Inter", sans-serif',
     "Inter with sans-serif fallback"
   );
-  await testFont(
+  testFont(
     "ff-[roboto,Arial,sans-serif]",
     'font-family: "Roboto", "Arial", sans-serif',
     "Multiple font stack"
   );
-  await testFont(
+  testFont(
     "ff-[Times,serif]",
     'font-family: "Times", serif',
     "Times with serif fallback"
   );
-  await testFont(
+  testFont(
     "ff-[Courier,monospace]",
     'font-family: "Courier", monospace',
     "Courier with monospace fallback"
@@ -110,33 +101,29 @@ async function runFontTests() {
   console.log("────────────────────────");
 
   // Test font names with special characters
-  await testFont(
+  testFont(
     "font-family-[times-new-roman]",
     'font-family: "Times New Roman"',
     "Times New Roman with dashes"
   );
-  await testFont(
+  testFont(
     "ff-[comic-sans-ms]",
     'font-family: "Comic Sans MS"',
     "Comic Sans MS"
   );
-  await testFont(
-    "ff-[trebuchet-ms]",
-    'font-family: "Trebuchet MS"',
-    "Trebuchet MS"
-  );
+  testFont("ff-[trebuchet-ms]", 'font-family: "Trebuchet MS"', "Trebuchet MS");
 
   console.log("\n⚡ Performance & Complex Cases:");
   console.log("──────────────────────────────");
 
   // Test complex font stacks
-  await testFont(
+  testFont(
     "ff-[inter,system-ui,sans-serif]",
     'font-family: "Inter", system-ui, sans-serif',
     "Complex system font stack"
   );
 
-  await testFont(
+  testFont(
     "ff-[source-code-pro,Consolas,Monaco,monospace]",
     'font-family: "Source Code Pro", "Consolas", "Monaco", monospace',
     "Complex monospace font stack"
@@ -158,7 +145,7 @@ async function runFontTests() {
 
   for (const test of invalidTests) {
     try {
-      const result = await zyraGenerateCSSFromClasses([test.className]);
+      const result = zyra.generate([test.className]);
       if (!result.success || !result.data.css.trim()) {
         console.log(`✅ ${test.description} correctly rejected`);
         passed++;
@@ -197,4 +184,9 @@ async function runFontTests() {
   console.log("• Invalid syntax: Properly rejected");
 }
 
-runFontTests().catch(console.error);
+try {
+  runFontTests();
+} catch (error) {
+  console.error(error);
+  process.exit(1);
+}

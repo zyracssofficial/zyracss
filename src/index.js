@@ -1,75 +1,40 @@
 /**
- * ZyraCSS - Main package entry point
- * Exports the programmatic API for generating utility-first CSS
- *
- * Re-export Pattern Purpose:
- * - Provides clean public API surface for consumers
- * - Maintains stable interface while allowing internal refactoring
- * - Groups related functionality logically for different use cases
- * - Enables tree-shaking for minimal bundle sizes
- * - Offers both granular and convenience imports
+ * ZyraCSS - Modern Clean API
+ * Single namespace export for simplicity and clarity
  */
 
-// ============================================================================
-// PRIMARY API - Core functionality for MVP
-// ============================================================================
-
-export {
-  zyraGenerateCSS,
-  zyraGenerateCSSFromHTML,
-  zyraGenerateCSSFromClasses,
-} from "./api/core/generateCSS.js";
+// Import all required functions
+import { zyraGenerateCSS } from "./api/core/generateCSS.js";
+import { zyraCSSManager } from "./api/core/browserManager.js";
+import { zyraCreateEngine } from "./api/core/createEngine.js";
 
 // ============================================================================
-// ADVANCED API - For complex integrations
+// ZYRA NAMESPACE - Modern Clean API
 // ============================================================================
 
-// Incremental engine for real-time editing
-export { zyraCreateEngine } from "./api/core/createEngine.js";
+export const zyra = {
+  // Main CSS generation
+  generate: zyraGenerateCSS,
 
-// Simple browser runtime for React/Vite projects
-export { zyraCSSManager } from "./api/core/browserManager.js";
+  // Inject manager - simplified to direct function call
+  inject: (classes) => {
+    try {
+      return zyraCSSManager.processClasses(classes);
+    } catch (error) {
+      if (typeof window === "undefined") {
+        console.warn("[ZyraCSS] Inject features require browser environment");
+        return;
+      }
+      throw error;
+    }
+  },
 
-// ============================================================================
-// UTILITY API - For tooling and advanced usage
-// ============================================================================
-
-export { zyraExtractClassFromHTML } from "./core/parser/index.js";
-export { validateClasses } from "./core/validators/index.js";
-
-// Additional convenience methods for validation
-export {
-  validateClassNames,
-  validateSingleClass,
-  getValidationStats,
-  parseClassesDirect,
-} from "./api/utilities/convenienceMethods.js";
-
-// Parser API with consistent structure
-import { parseClasses as coreParseClasses } from "./core/parser/classParser.js";
-export function parseClasses(classes) {
-  const result = coreParseClasses(classes);
-  return {
-    hasAnyValid: result.hasAnyValid,
-    valid: result.parsed || [],
-    invalid: result.invalid || [],
-  };
-}
+  // Advanced engine for incremental processing
+  createEngine: zyraCreateEngine,
+};
 
 // ============================================================================
-// METADATA & UTILITIES - Version info and tooling
+// DEFAULT EXPORT - Zyra namespace
 // ============================================================================
 
-export { zyraGetVersion } from "./core/utils/version.js";
-export { cleanupGlobalCache } from "./core/cache/index.js";
-export { now } from "./core/utils/index.js";
-export { MAX_FILES_LIMIT } from "./core/security/securityConstants.js";
-
-// Error handling for CLI tools
-export { ZyraError, ERROR_CODES } from "./core/errors/index.js";
-
-// ============================================================================
-// DEFAULT EXPORT - Main function for convenience
-// ============================================================================
-
-export { zyraGenerateCSS as default } from "./api/core/generateCSS.js";
+export default zyra;

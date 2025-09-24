@@ -1,6 +1,6 @@
 /**
  * CSS generation orchestrator module
- * Handles the core CSS generation workflow and caching
+ * Handles the core CSS generation workflow
  */
 
 import { parseClasses } from "../../core/parser/index.js";
@@ -13,9 +13,9 @@ import { ZyraResult, ErrorFactory } from "../../core/errors/essential.js";
  * @param {Array} validClasses - Security-validated classes
  * @param {Object} options - Generation options
  * @param {Object} timer - Performance timer instance
- * @returns {Promise<ZyraResult>} CSS generation result
+ * @returns {ZyraResult} CSS generation result
  */
-export async function zyraGenerateCSSFromValidatedClasses(
+export function zyraGenerateCSSFromValidatedClasses(
   validClasses,
   options,
   timer
@@ -67,7 +67,7 @@ export async function zyraGenerateCSSFromValidatedClasses(
   }
 
   // Generate CSS without double-caching
-  const generationResult = await zyraGenerateCSSWithoutCaching(
+  const generationResult = zyraGenerateCSSWithoutCaching(
     parseResult.parsed,
     validClasses,
     options,
@@ -91,9 +91,9 @@ export async function zyraGenerateCSSFromValidatedClasses(
  * @param {Array} classNames - Original class name strings for caching
  * @param {Object} options - Generation options
  * @param {Object} timer - Performance timer instance
- * @returns {Promise<ZyraResult>} CSS generation result
+ * @returns {ZyraResult} CSS generation result
  */
-async function zyraGenerateCSSWithoutCaching(
+function zyraGenerateCSSWithoutCaching(
   parsedClasses,
   classNames,
   options,

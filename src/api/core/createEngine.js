@@ -108,8 +108,14 @@ export function zyraCreateEngine(options = {}) {
       stats.cacheHits++;
       return {
         ...cachedCSS,
-        fromCache: true,
-        processingTime: 0,
+        data: {
+          ...cachedCSS.data,
+          stats: {
+            ...cachedCSS.data.stats,
+            fromCache: true,
+            processingTime: 0,
+          },
+        },
       };
     }
 
@@ -117,14 +123,26 @@ export function zyraCreateEngine(options = {}) {
 
     if (allClasses.size === 0) {
       const emptyResult = {
-        css: "",
-        classes: [],
-        stats: {
-          totalClasses: 0,
-          generatedRules: 0,
-          processingTime: 0,
+        success: true,
+        data: {
+          css: "",
+          stats: {
+            totalClasses: 0,
+            validClasses: 0,
+            invalidClasses: 0,
+            generatedRules: 0,
+            processingTime: 0,
+            fromCache: false,
+            cacheTimestamp: null,
+          },
+          invalid: [],
+          security: {
+            passed: true,
+            blockedClasses: [],
+            warnings: [],
+          },
         },
-        fromCache: false,
+        error: null,
       };
 
       if (cacheEnabled) {
@@ -151,10 +169,10 @@ export function zyraCreateEngine(options = {}) {
           parsedClasses.push(parseCache.get(className));
         } else {
           // Parse new class
-          const parsed = parseClasses([className]);
-          if (parsed.length > 0) {
-            parseCache.set(className, parsed[0]);
-            parsedClasses.push(parsed[0]);
+          const parseResult = parseClasses([className]);
+          if (parseResult.parsed.length > 0) {
+            parseCache.set(className, parseResult.parsed[0]);
+            parsedClasses.push(parseResult.parsed[0]);
           }
         }
       }
@@ -164,16 +182,28 @@ export function zyraCreateEngine(options = {}) {
       const processingTime = now() - startTime;
 
       const finalResult = {
-        css: result.css,
-        classes: Array.from(allClasses), // Convert only when needed for result
-        stats: {
-          totalClasses: allClasses.size,
-          generatedRules: result.stats.totalRules || 0,
-          groupedRules: result.stats.groupedRules || 0,
-          compressionRatio: result.stats.compressionRatio || 1,
-          processingTime: Math.round(processingTime * 100) / 100,
+        success: true,
+        data: {
+          css: result.css,
+          stats: {
+            totalClasses: allClasses.size,
+            validClasses: allClasses.size, // Engine only tracks valid classes
+            invalidClasses: 0, // Invalid classes filtered during addClasses
+            generatedRules: result.stats.totalRules || 0,
+            groupedRules: result.stats.groupedRules || 0,
+            compressionRatio: result.stats.compressionRatio || 1,
+            processingTime: Math.round(processingTime * 100) / 100,
+            fromCache: false,
+            cacheTimestamp: null,
+          },
+          invalid: [], // Engine doesn't track invalid classes in output
+          security: {
+            passed: true,
+            blockedClasses: [],
+            warnings: [],
+          }, // Engine operates on pre-validated classes
         },
-        fromCache: false,
+        error: null,
       };
 
       // Update performance stats

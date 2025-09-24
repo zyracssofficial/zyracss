@@ -4,11 +4,7 @@
  * Comprehensive testing of API functionality: Security, Cache, Parsing, Regex, Error Handling, Performance
  */
 
-import {
-  zyraGenerateCSSFromClasses,
-  zyraGenerateCSSFromHTML,
-  parseClasses,
-} from "../src/index.js";
+import { zyra } from "../src/index.js";
 import { globalCache } from "../src/core/cache/index.js";
 
 console.log("🔌 ZyraCSS API Test Suite");
@@ -54,7 +50,7 @@ class APITestSuite {
         "m-[expression(alert(1))]",
       ];
 
-      const result = await zyraGenerateCSSFromClasses(maliciousClasses);
+      const result = zyra.generate(maliciousClasses);
 
       // Check if malicious content is sanitized or properly escaped
       const css = result.data?.css || "";
@@ -88,7 +84,7 @@ class APITestSuite {
 
     for (const input of invalidInputs) {
       try {
-        const result = await zyraGenerateCSSFromClasses(input);
+        const result = zyra.generate(input);
         // If it doesn't throw, it should return an error result
         if (!result.success || result.error) {
           properValidation++;
@@ -114,7 +110,7 @@ class APITestSuite {
         'bg-[red; @import "evil.css"]',
       ];
 
-      const result = await zyraGenerateCSSFromClasses(injectionAttempts);
+      const result = zyra.generate(injectionAttempts);
 
       if (result.success) {
         const css = result.data?.css || "";
@@ -152,7 +148,7 @@ class APITestSuite {
       const largeClass = "p-[" + "x".repeat(10000) + "]";
       const startTime = Date.now();
 
-      const result = await zyraGenerateCSSFromClasses([largeClass]);
+      const result = zyra.generate([largeClass]);
       const processingTime = Date.now() - startTime;
 
       // Should either handle quickly or reject properly
@@ -184,7 +180,7 @@ class APITestSuite {
     const testClasses = ["p-[2rem]", "m-[1rem]", "bg-[#ff0000]"];
 
     // Test 1: Cache Miss (First Call)
-    const result1 = await zyraGenerateCSSFromClasses(testClasses);
+    const result1 = zyra.generate(testClasses);
     this.logTest(
       "cache",
       "Cache Miss Detection",
@@ -193,7 +189,7 @@ class APITestSuite {
     );
 
     // Test 2: Cache Hit (Second Call)
-    const result2 = await zyraGenerateCSSFromClasses(testClasses);
+    const result2 = zyra.generate(testClasses);
     this.logTest(
       "cache",
       "Cache Hit Detection",
@@ -214,7 +210,7 @@ class APITestSuite {
     const times = [];
     for (let i = 0; i < 5; i++) {
       const start = Date.now();
-      await zyraGenerateCSSFromClasses(testClasses);
+      zyra.generate(testClasses);
       times.push(Date.now() - start);
     }
 
@@ -239,11 +235,11 @@ class APITestSuite {
     const options1 = { minify: false };
     const options2 = { minify: true };
 
-    await zyraGenerateCSSFromClasses(testClasses, options1);
-    await zyraGenerateCSSFromClasses(testClasses, options2);
+    zyra.generate(testClasses, options1);
+    zyra.generate(testClasses, options2);
 
-    const cached1 = await zyraGenerateCSSFromClasses(testClasses, options1);
-    const cached2 = await zyraGenerateCSSFromClasses(testClasses, options2);
+    const cached1 = zyra.generate(testClasses, options1);
+    const cached2 = zyra.generate(testClasses, options2);
 
     const bothCached =
       cached1.data?.stats?.fromCache === true &&
@@ -277,7 +273,7 @@ class APITestSuite {
 
     let successfulParses = 0;
     for (const className of zyraClasses) {
-      const result = await zyraGenerateCSSFromClasses([className]);
+      const result = zyra.generate([className]);
       if (result.success && result.data?.css && result.data.css.length > 0) {
         successfulParses++;
       }
@@ -300,7 +296,7 @@ class APITestSuite {
     let complexSuccess = 0;
     for (const className of complexClasses) {
       try {
-        const result = await zyraGenerateCSSFromClasses([className]);
+        const result = zyra.generate([className]);
         if (result.success) complexSuccess++;
       } catch (error) {
         // Some complex cases might not be supported yet
@@ -322,7 +318,7 @@ class APITestSuite {
         </div>
       `;
 
-      const result = await zyraGenerateCSSFromHTML(htmlContent);
+      const result = zyra.generate(htmlContent);
       const extractedSuccessfully =
         result.success &&
         result.data?.css &&
@@ -345,7 +341,7 @@ class APITestSuite {
 
     for (const className of invalidClasses) {
       try {
-        const result = await zyraGenerateCSSFromClasses([className]);
+        const result = zyra.generate([className]);
         // Should either succeed with empty/minimal CSS or mark as invalid
         if (
           !result.success ||
@@ -366,28 +362,6 @@ class APITestSuite {
       invalidHandled >= 4,
       `${invalidHandled}/${invalidClasses.length} invalid classes handled properly`
     );
-
-    // Test 5: parseClasses Direct API
-    try {
-      const directParseResult = parseClasses([
-        "p-[2rem]",
-        "invalid-class",
-        "m-[1rem]",
-      ]);
-      const hasValidStructure =
-        directParseResult.hasAnyValid !== undefined &&
-        Array.isArray(directParseResult.valid) &&
-        Array.isArray(directParseResult.invalid);
-
-      this.logTest(
-        "parsing",
-        "Direct parseClasses API",
-        hasValidStructure,
-        `Structure: ${hasValidStructure ? "correct" : "incorrect"}`
-      );
-    } catch (error) {
-      this.logTest("parsing", "Direct parseClasses API", false, error.message);
-    }
   }
 
   async testRegex() {
@@ -408,7 +382,7 @@ class APITestSuite {
     let correctMatches = 0;
     for (const testCase of regexTestCases) {
       try {
-        const result = await zyraGenerateCSSFromClasses([testCase.pattern]);
+        const result = zyra.generate([testCase.pattern]);
         const matched =
           result.success && result.data?.css && result.data.css.length > 20;
 
@@ -435,7 +409,7 @@ class APITestSuite {
 
     for (const testCase of regexTestCases) {
       try {
-        await zyraGenerateCSSFromClasses([testCase.pattern]);
+        zyra.generate([testCase.pattern]);
       } catch (error) {
         // Expected for some patterns
       }
@@ -461,7 +435,7 @@ class APITestSuite {
     for (const pattern of maliciousPatterns) {
       const patternStart = Date.now();
       try {
-        await zyraGenerateCSSFromClasses([pattern]);
+        zyra.generate([pattern]);
       } catch (error) {
         // Expected rejection
       }
@@ -493,7 +467,7 @@ class APITestSuite {
     let specialHandled = 0;
     for (const pattern of specialChars) {
       try {
-        const result = await zyraGenerateCSSFromClasses([pattern]);
+        const result = zyra.generate([pattern]);
         if (result.success || result.data?.invalid?.includes(pattern)) {
           specialHandled++; // Either parsed or properly marked invalid
         }
@@ -520,7 +494,7 @@ class APITestSuite {
 
     for (const input of nullInputs) {
       try {
-        const result = await zyraGenerateCSSFromClasses(input);
+        const result = zyra.generate(input);
         // Should return error result, not throw
         if (!result.success && result.error) {
           nullHandling++;
@@ -544,7 +518,7 @@ class APITestSuite {
 
     for (const input of wrongTypes) {
       try {
-        const result = await zyraGenerateCSSFromClasses(input);
+        const result = zyra.generate(input);
         if (!result.success) {
           wrongTypeHandling++;
         }
@@ -562,7 +536,7 @@ class APITestSuite {
 
     // Test 3: Empty Input Graceful Handling
     try {
-      const emptyResult = await zyraGenerateCSSFromClasses([]);
+      const emptyResult = zyra.generate([]);
       this.logTest(
         "errorHandling",
         "Empty Input Graceful Handling",
@@ -589,7 +563,7 @@ class APITestSuite {
     let malformedHandling = 0;
     for (const className of malformedClasses) {
       try {
-        const result = await zyraGenerateCSSFromClasses([className]);
+        const result = zyra.generate([className]);
         // Should handle gracefully - either succeed, mark as invalid, or reject for security
         if (
           result.success ||
@@ -612,7 +586,7 @@ class APITestSuite {
 
     // Test 5: Error Message Quality
     try {
-      await zyraGenerateCSSFromClasses(null);
+      zyra.generate(null);
     } catch (error) {
       const hasUsefulError =
         error.message &&
@@ -639,7 +613,7 @@ class APITestSuite {
 
     for (let i = 0; i < 5; i++) {
       const start = process.hrtime.bigint();
-      await zyraGenerateCSSFromClasses(smallSet);
+      zyra.generate(smallSet);
       const end = process.hrtime.bigint();
       smallTimes.push(Number(end - start) / 1_000_000);
     }
@@ -656,7 +630,7 @@ class APITestSuite {
     const largeSet = Array.from({ length: 20 }, (_, i) => `p-[${i + 1}rem]`);
 
     const largeStart = process.hrtime.bigint();
-    await zyraGenerateCSSFromClasses(largeSet);
+    zyra.generate(largeSet);
     const largeEnd = process.hrtime.bigint();
     const largeTime = Number(largeEnd - largeStart) / 1_000_000;
 
@@ -671,12 +645,12 @@ class APITestSuite {
     globalCache.clear();
 
     const coldStart = process.hrtime.bigint();
-    await zyraGenerateCSSFromClasses(smallSet);
+    zyra.generate(smallSet);
     const coldEnd = process.hrtime.bigint();
     const coldTime = Number(coldEnd - coldStart) / 1_000_000;
 
     const warmStart = process.hrtime.bigint();
-    await zyraGenerateCSSFromClasses(smallSet);
+    zyra.generate(smallSet);
     const warmEnd = process.hrtime.bigint();
     const warmTime = Number(warmEnd - warmStart) / 1_000_000;
 
@@ -692,7 +666,7 @@ class APITestSuite {
     const initialMemory = process.memoryUsage().heapUsed;
 
     for (let i = 0; i < 50; i++) {
-      await zyraGenerateCSSFromClasses([`p-[${i}px]`, `m-[${i}rem]`]);
+      zyra.generate([`p-[${i}px]`, `m-[${i}rem]`]);
     }
 
     const finalMemory = process.memoryUsage().heapUsed;
@@ -707,7 +681,7 @@ class APITestSuite {
 
     // Test 5: Concurrent Request Handling
     const concurrentPromises = Array.from({ length: 10 }, (_, i) =>
-      zyraGenerateCSSFromClasses([`p-[${i}rem]`, `m-[${i}px]`])
+      zyra.generate([`p-[${i}rem]`, `m-[${i}px]`])
     );
 
     const concurrentStart = process.hrtime.bigint();
@@ -792,3 +766,4 @@ async function runAPITestSuite() {
 }
 
 runAPITestSuite();
+

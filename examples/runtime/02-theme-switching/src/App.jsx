@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { zyraCSSManager } from "zyracss";
+import { zyra } from "zyracss";
 
 const themes = {
   light: {
@@ -43,7 +43,7 @@ function App() {
 
   // Process static layout styles once
   useEffect(() => {
-    zyraCSSManager.processClasses([
+    zyra.inject([
       "min-h-[100vh]",
       "p-[2rem]",
       "d-[flex]",
@@ -114,7 +114,7 @@ function App() {
       `hover:c-[${theme.text}]`,
     ];
 
-    zyraCSSManager.processClasses(themeClasses);
+    zyra.inject(themeClasses);
   }, [currentTheme, theme]);
 
   const containerClass = `min-h-[100vh] bg-[${theme.background}] p-[2rem] d-[flex] flex-direction-[column] align-items-[center] transition-[all,0.3s,ease]`;

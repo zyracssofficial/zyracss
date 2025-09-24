@@ -266,3 +266,4 @@ if (failed === 0) {
   console.log("\n⚠️ CLI needs attention before MVP");
   process.exit(1);
 }
+

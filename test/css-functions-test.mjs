@@ -1,11 +1,9 @@
 /**
  * ZyraCSS CSS Functions Test Suite - Rewritten for async API
- * Tests supp    await test('CSS variable with fallback', async () => {
-        return await expectCSS(['font-size-[var(--font-size,calc(1rem+2px))]'], 'font-size: var(--font-size, calc(1rem + 2px))');
-    }); for CSS functions like calc(), var(), rgb(), hsl(), u(), linear-gradient()
+ * Tests support for CSS functions like calc(), var(), rgb(), hsl(), u(), linear-gradient()
  */
 
-import { zyraGenerateCSS as generateCSS } from "../src/index.js";
+import { zyra } from "../src/index.js";
 
 // ANSI color codes for console output
 const colors = {
@@ -46,7 +44,7 @@ async function test(name, testFn) {
 
 async function expectCSS(classes, expectedPattern) {
   try {
-    const result = await generateCSS(classes);
+    const result = zyra.generate(classes);
     return result.success && result.data.css.includes(expectedPattern);
   } catch (error) {
     return false;
@@ -55,7 +53,7 @@ async function expectCSS(classes, expectedPattern) {
 
 async function expectFailure(classes, expectedErrorCode) {
   try {
-    const result = await generateCSS(classes);
+    const result = zyra.generate(classes);
     return (
       !result.success && result.error && result.error.code === expectedErrorCode
     );
@@ -365,7 +363,7 @@ async function runTests() {
   // Error handling tests
   await test("Invalid function syntax (should handle gracefully)", async () => {
     try {
-      const result = await generateCSS(["width-[calc(100%)]"]);
+      const result = zyra.generate(["width-[calc(100%)]"]);
       // Should either work or fail gracefully
       return true;
     } catch (error) {
@@ -375,7 +373,7 @@ async function runTests() {
 
   await test("Unbalanced parentheses (should handle gracefully)", async () => {
     try {
-      const result = await generateCSS(["width-[calc(100%-20px]"]);
+      const result = zyra.generate(["width-[calc(100%-20px]"]);
       // Should either work or fail gracefully
       return true;
     } catch (error) {
@@ -385,7 +383,7 @@ async function runTests() {
 
   // Functions with responsive prefixes
   await test("Responsive calc() function", async () => {
-    const result = await generateCSS(["md:width-[calc(100%-40px)]"]);
+    const result = zyra.generate(["md:width-[calc(100%-40px)]"]);
     return (
       result.success &&
       result.data.css.includes("@media (min-width: 768px)") &&
@@ -394,7 +392,7 @@ async function runTests() {
   });
 
   await test("Responsive gradient with functions", async () => {
-    const result = await generateCSS([
+    const result = zyra.generate([
       "lg:background-[linear-gradient(45deg,rgb(255,0,0),hsl(240,100%,50%))]",
     ]);
     return (
@@ -431,3 +429,4 @@ async function runTests() {
 
 // Run all tests
 runTests().catch(console.error);
+

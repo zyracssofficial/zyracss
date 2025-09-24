@@ -3,7 +3,9 @@
  * Tests breakpoint functionality and responsive prefixes
  */
 
-import { zyraGenerateCSS as generateCSS } from "../src/index.js";
+import { zyra } from "../src/index.js";
+
+const generateCSS = zyra.generate;
 
 const BREAKPOINTS = {
   sm: "640px",
@@ -47,15 +49,6 @@ async function test(name, testFn) {
     console.log(
       `${colors.red}❌ ${name} - Error: ${error.message}${colors.reset}`
     );
-  }
-}
-
-async function expectCSS(classes, expectedPattern) {
-  try {
-    const result = await generateCSS(classes);
-    return result.success && result.data.css.includes(expectedPattern);
-  } catch (error) {
-    return false;
   }
 }
 
@@ -714,3 +707,4 @@ async function runTests() {
 
 // Run all tests
 runTests().catch(console.error);
+

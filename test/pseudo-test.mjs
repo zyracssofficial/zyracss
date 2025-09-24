@@ -3,7 +3,7 @@
  * Tests the modifier system for :hover, ::before, etc.
  */
 
-import { zyraGenerateCSS } from "../src/index.js";
+import { zyra } from "../src/index.js";
 
 console.log("🎭 ZyraCSS Pseudo-Class & Pseudo-Element Test");
 console.log("================================================");
@@ -65,7 +65,7 @@ let failed = 0;
 
 for (const testCase of testCases) {
   try {
-    const result = await zyraGenerateCSS([testCase.input]);
+    const result = zyra.generate([testCase.input]);
 
     const shouldFail = testCase.description.includes("should fail");
     const actuallyFailed =
@@ -129,3 +129,4 @@ if (failed > 0) {
   console.log("");
   console.log("🎉 All pseudo-class/pseudo-element tests passed!");
 }
+

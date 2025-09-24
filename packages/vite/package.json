@@ -1,18 +1,22 @@
 {
   "name": "@zyracss/vite",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "ZyraCSS Vite Plugin - Build-time CSS generation with smart framework detection",
   "main": "src/index.js",
+  "types": "src/index.d.ts",
   "type": "module",
   "exports": {
-    ".": "./src/index.js"
+    ".": {
+      "import": "./src/index.js",
+      "types": "./src/index.d.ts"
+    }
   },
   "files": [
     "src",
     "LICENSE"
   ],
   "peerDependencies": {
-    "zyracss": "^0.1.3",
+    "zyracss": "^0.2.0",
     "vite": "^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0"
   },
   "keywords": [

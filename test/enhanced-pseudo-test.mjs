@@ -2,7 +2,7 @@
  * ZyraCSS Enhanced Pseudo Test - Clean version
  */
 
-import { zyraGenerateCSS as generateCSS } from "../src/index.js";
+import { zyra } from "../src/index.js";
 
 const colors = {
   reset: "\x1b[0m",
@@ -38,7 +38,7 @@ async function test(name, testFn) {
 
 async function expectCSS(classes, expectedPattern) {
   try {
-    const result = await generateCSS(classes);
+    const result = zyra.generate(classes);
     return result.success && result.data.css.includes(expectedPattern);
   } catch (error) {
     return false;
@@ -121,7 +121,7 @@ async function runTests() {
 
   // Responsive + Pseudo combinations
   await test("Small breakpoint with hover", async () => {
-    const result = await generateCSS(["sm:hover:color-[red]"]);
+    const result = zyra.generate(["sm:hover:color-[red]"]);
     return (
       result.success &&
       result.data.css.includes("@media") &&
@@ -130,7 +130,7 @@ async function runTests() {
   });
 
   await test("Medium breakpoint with focus", async () => {
-    const result = await generateCSS(["md:focus:transform-[scale(0.95)]"]);
+    const result = zyra.generate(["md:focus:transform-[scale(0.95)]"]);
     return (
       result.success &&
       result.data.css.includes("@media") &&
@@ -235,7 +235,7 @@ async function runTests() {
 
   // Complex pseudo with CSS functions
   await test("Hover with box-shadow and transition", async () => {
-    const result = await generateCSS([
+    const result = zyra.generate([
       "hover:box-shadow-[0,4px,8px,rgba(0,0,0,0.2)]",
     ]);
     return (
@@ -303,7 +303,7 @@ async function runTests() {
 
   // Advanced responsive + pseudo combinations
   await test("Large breakpoint with before pseudo-element", async () => {
-    const result = await generateCSS(['lg:before:content-["Desktop"]']);
+    const result = zyra.generate(['lg:before:content-["Desktop"]']);
     return (
       result.success &&
       result.data.css.includes("@media") &&
@@ -312,7 +312,7 @@ async function runTests() {
   });
 
   await test("Extra large breakpoint with hover", async () => {
-    const result = await generateCSS(["xl:hover:transform-[scale(1.05)]"]);
+    const result = zyra.generate(["xl:hover:transform-[scale(1.05)]"]);
     return (
       result.success &&
       result.data.css.includes("@media") &&
@@ -321,7 +321,7 @@ async function runTests() {
   });
 
   await test("XL breakpoint with focus (duplicate)", async () => {
-    const result = await generateCSS(["xl:focus:box-shadow-[0,0,0,3px,blue]"]);
+    const result = zyra.generate(["xl:focus:box-shadow-[0,0,0,3px,blue]"]);
     return (
       result.success &&
       result.data.css.includes("@media") &&
@@ -373,7 +373,7 @@ async function runTests() {
 
   // Advanced pseudo-element styling
   await test("Before with positioning and z-index", async () => {
-    const result = await generateCSS([
+    const result = zyra.generate([
       "before:position-[absolute]",
       "before:z-index-[10]",
     ]);
@@ -385,7 +385,7 @@ async function runTests() {
   });
 
   await test("After with transform and transition", async () => {
-    const result = await generateCSS(["after:transform-[translateX(10px)]"]);
+    const result = zyra.generate(["after:transform-[translateX(10px)]"]);
     return (
       result.success &&
       result.data.css.includes("::after") &&
@@ -395,7 +395,7 @@ async function runTests() {
 
   // Multiple pseudo-classes on same element
   await test("Hover and focus states together", async () => {
-    const result = await generateCSS([
+    const result = zyra.generate([
       "hover:color-[blue]",
       "focus:color-[green]",
     ]);
@@ -409,7 +409,7 @@ async function runTests() {
   // Error handling tests
   await test("Invalid pseudo-class graceful handling", async () => {
     try {
-      const result = await generateCSS(["invalid-pseudo:color-[red]"]);
+      const result = zyra.generate(["invalid-pseudo:color-[red]"]);
       return !result.success || result.data.css.trim() === "";
     } catch (error) {
       return true; // Expected to fail
@@ -418,7 +418,7 @@ async function runTests() {
 
   await test("Malformed pseudo-element handling", async () => {
     try {
-      const result = await generateCSS(['before-invalid:content-["test"]']);
+      const result = zyra.generate(['before-invalid:content-["test"]']);
       return !result.success || result.data.css.trim() === "";
     } catch (error) {
       return true; // Expected to fail
@@ -448,3 +448,4 @@ async function runTests() {
 }
 
 runTests().catch(console.error);
+

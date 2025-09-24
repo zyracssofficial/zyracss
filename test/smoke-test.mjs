@@ -1,15 +1,26 @@
 #!/usr/bin/env node
 /**
- * ZyraCSS MVP Smoke Test
- * Quick validation of core functionality - the most critical features
+ * ZyraCSfunction test(name, fn) {
+  try {
+    const result = fn();
+    if (result) {
+      console.log(`✅ ${name}`);
+      passedTests++;
+    } else {
+      console.log(`❌ ${name}`);
+      failedTests++;
+    }
+  } catch (error) {
+    console.log(`❌ ${name}: ${error.message}`);
+    failedTests++;
+  }
+} Quick validation of core functionality - the most critical features
+ * Updated to use new zyra namespace API
  */
 
 console.log("Starting imports...");
 
-import {
-  zyraGenerateCSSFromClasses,
-  zyraGenerateCSSFromHTML,
-} from "../src/index.js";
+import { zyra } from "../src/index.js";
 
 console.log("Imports complete!");
 
@@ -60,23 +71,23 @@ async function asyncTest(name, fn) {
 console.log("\n🔍 Core Parsing Tests");
 console.log("─".repeat(30));
 
-await asyncTest("Single value brackets: p-[2rem]", async () => {
-  const result = await zyraGenerateCSSFromClasses(["p-[2rem]"]);
+test("Single value brackets: p-[2rem]", () => {
+  const result = zyra.generate(["p-[2rem]"]);
   return result.data.css.includes("padding: 2rem");
 });
 
 await asyncTest("Multiple values: m-[1rem,2rem,3rem,4rem]", async () => {
-  const result = await zyraGenerateCSSFromClasses(["m-[1rem,2rem,3rem,4rem]"]);
+  const result = zyra.generate(["m-[1rem,2rem,3rem,4rem]"]);
   return result.data.css.includes("margin: 1rem 2rem 3rem 4rem");
 });
 
-await asyncTest("Full property names: padding-[24px]", async () => {
-  const result = await zyraGenerateCSSFromClasses(["padding-[24px]"]);
+test("Full property names: padding-[24px]", () => {
+  const result = zyra.generate(["padding-[24px]"]);
   return result.data.css.includes("padding: 24px");
 });
 
-await asyncTest("Color values: bg-[#ff0000]", async () => {
-  const result = await zyraGenerateCSSFromClasses(["bg-[#ff0000]"]);
+test("Color values: bg-[#ff0000]", () => {
+  const result = zyra.generate(["bg-[#ff0000]"]);
   return result.data.css.includes("background: #ff0000");
 });
 
@@ -84,18 +95,18 @@ await asyncTest("Color values: bg-[#ff0000]", async () => {
 console.log("\n🚫 Tailwind Rejection Tests");
 console.log("─".repeat(30));
 
-await asyncTest("Reject Tailwind: p-4", async () => {
-  const result = await zyraGenerateCSSFromClasses(["p-4"]);
+test("Reject Tailwind: p-4", () => {
+  const result = zyra.generate(["p-4"]);
   return result.data.stats.validClasses === 0;
 });
 
-await asyncTest("Reject Tailwind: bg-red-500", async () => {
-  const result = await zyraGenerateCSSFromClasses(["bg-red-500"]);
+test("Reject Tailwind: bg-red-500", () => {
+  const result = zyra.generate(["bg-red-500"]);
   return result.data.stats.validClasses === 0;
 });
 
-await asyncTest("Reject Tailwind: text-xl", async () => {
-  const result = await zyraGenerateCSSFromClasses(["text-xl"]);
+test("Reject Tailwind: text-xl", () => {
+  const result = zyra.generate(["text-xl"]);
   return result.data.stats.validClasses === 0;
 });
 
@@ -103,13 +114,13 @@ await asyncTest("Reject Tailwind: text-xl", async () => {
 console.log("\n🛡️ Security Tests");
 console.log("─".repeat(30));
 
-await asyncTest("Block XSS: bg-[javascript:alert(1)]", async () => {
-  const result = await zyraGenerateCSSFromClasses(["bg-[javascript:alert(1)]"]);
+test("Block XSS: bg-[javascript:alert(1)]", () => {
+  const result = zyra.generate(["bg-[javascript:alert(1)]"]);
   return !result.success || !result.data?.css?.includes("javascript:");
 });
 
-await asyncTest("Block injection: p-[expression(alert(1))]", async () => {
-  const result = await zyraGenerateCSSFromClasses(["p-[expression(alert(1))]"]);
+test("Block injection: p-[expression(alert(1))]", () => {
+  const result = zyra.generate(["p-[expression(alert(1))]"]);
   return !result.success || !result.data?.css?.includes("expression(");
 });
 
@@ -117,18 +128,18 @@ await asyncTest("Block injection: p-[expression(alert(1))]", async () => {
 console.log("\n⚠️ Error Handling Tests");
 console.log("─".repeat(30));
 
-await asyncTest("Handle null input gracefully", async () => {
-  const result = await zyraGenerateCSSFromClasses(null);
+test("Handle null input gracefully", () => {
+  const result = zyra.generate(null);
   return result.data?.stats?.validClasses === 0 || !result.success;
 });
 
-await asyncTest("Handle empty brackets: p-[]", async () => {
-  const result = await zyraGenerateCSSFromClasses(["p-[]"]);
+test("Handle empty brackets: p-[]", () => {
+  const result = zyra.generate(["p-[]"]);
   return result.data.stats.validClasses === 0;
 });
 
-await asyncTest("Handle malformed: p-[2rem", async () => {
-  const result = await zyraGenerateCSSFromClasses(["p-[2rem"]);
+test("Handle malformed: p-[2rem", () => {
+  const result = zyra.generate(["p-[2rem"]);
   return result.data.stats.validClasses === 0;
 });
 
@@ -136,15 +147,15 @@ await asyncTest("Handle malformed: p-[2rem", async () => {
 console.log("\n📄 HTML Extraction Tests");
 console.log("─".repeat(30));
 
-await asyncTest("Extract from HTML", async () => {
+test("Extract from HTML", () => {
   const html = '<div class="p-[2rem] bg-[blue]">Test</div>';
-  const result = await zyraGenerateCSSFromHTML(html);
+  const result = zyra.generate(html);
   return result.data.stats.validClasses === 2;
 });
 
-await asyncTest("Ignore Tailwind in HTML", async () => {
+test("Ignore Tailwind in HTML", () => {
   const html = '<div class="p-4 bg-red-500 m-[1rem]">Test</div>';
-  const result = await zyraGenerateCSSFromHTML(html);
+  const result = zyra.generate(html);
   return result.data.stats.validClasses === 1; // Only m-[1rem] should be valid
 });
 
@@ -152,10 +163,10 @@ await asyncTest("Ignore Tailwind in HTML", async () => {
 console.log("\n⚡ Performance Smoke Test");
 console.log("─".repeat(30));
 
-await asyncTest("Process 50 classes under 100ms", async () => {
+test("Process 50 classes under 100ms", () => {
   const classes = Array.from({ length: 50 }, (_, i) => `p-[${i}px]`);
   const start = Date.now();
-  await zyraGenerateCSSFromClasses(classes);
+  zyra.generate(classes);
   const duration = Date.now() - start;
   console.log(`    Duration: ${duration}ms`);
   return duration < 100;

@@ -269,11 +269,11 @@ export default {
 For client-side rendering or dynamic class generation:
 
 ```javascript
-import { zyraCSSManager } from "@zyracss/vite";
+import { zyra } from "@zyracss/vite";
 
 // Generate CSS on the fly
-const css = zyraCSSManager.generateCSS(["bg-blue-500", "text-[20px]"]);
-console.log(css); // .bg-blue-500{background-color:#3b82f6}...
+const css = zyra.generate(["bg-blue-500", "text-[20px]"]);
+console.log(css.data.css); // .bg-blue-500{background-color:#3b82f6}...
 ```
 
 ## 📁 **Output Modes**

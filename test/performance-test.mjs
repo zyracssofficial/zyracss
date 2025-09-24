@@ -2,7 +2,7 @@
  * Performance Test: Large Component Rendering with ZyraCSS
  */
 
-import { zyraGenerateCSS } from "../src/index.js";
+import { zyra } from "../src/index.js";
 
 // Simulate ZyraCSS Manager behavior
 class PerformanceTestManager {
@@ -57,7 +57,7 @@ class PerformanceTestManager {
         );
 
         try {
-          const result = await zyraGenerateCSS(newClasses, {
+          const result = zyra.generate(newClasses, {
             minify: false,
             groupSelectors: true,
           });
@@ -203,3 +203,4 @@ async function runPerformanceTests() {
 
 // Run the tests
 runPerformanceTests().catch(console.error);
+

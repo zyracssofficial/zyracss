@@ -3,7 +3,7 @@
  * Tests for proper border shorthand validation according to CSS specification
  */
 
-import { zyraGenerateCSS } from "../src/index.js";
+import { zyra } from "../src/index.js";
 
 console.log("🔲 Border Shorthand Validation Test");
 console.log("===================================");
@@ -236,7 +236,7 @@ async function runBorderShorthandTest() {
 
   for (const testCase of testCases) {
     try {
-      const result = await zyraGenerateCSS([testCase.class]);
+      const result = zyra.generate([testCase.class]);
       const hasCSS = !!(
         result.success &&
         result.data.css &&
@@ -293,3 +293,4 @@ async function runBorderShorthandTest() {
 
 // Run the test
 runBorderShorthandTest().catch(console.error);
+

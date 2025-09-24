@@ -9,7 +9,7 @@
  * - Edge cases and boundary conditions
  */
 
-import { zyraGenerateCSSFromClasses } from "../src/index.js";
+import { zyra } from "../src/index.js";
 
 console.log("🎯 ZyraCSS Comprehensive Property Test Suite");
 console.log("===========================================");
@@ -46,7 +46,7 @@ async function testProperty(className, shouldPass, description, category) {
   categories[category].total++;
 
   try {
-    const result = await zyraGenerateCSSFromClasses([className]);
+    const result = zyra.generate([className]);
     const actuallyPassed =
       result.success && result.data?.css?.trim().length > 0;
 
@@ -915,3 +915,4 @@ async function runComprehensiveTests() {
 }
 
 runComprehensiveTests().catch(console.error);
+
